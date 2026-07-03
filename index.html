@@ -569,7 +569,7 @@
   <header class="hero">
     <div class="eyebrow">Framework</div>
     <h1>Where <em>Ikigai</em> Meets the Term Sheet</h1>
-    <p class="sub">Every fundable company sits where four circles overlap — passion, skill, need, and economics[cite: 2]. Search for ecosystem companies below to dynamically map them into their diligence coordinates.</p>
+    <p class="sub">Map any company into its diligence coordinates. Search below.</p>
 
     <!-- Search Engine Interface Element Container -->
     <div class="search-container">
@@ -792,11 +792,11 @@
         <div class="verdict-head great"><span class="dot great"></span>Got It Right</div>
         <div class="card">
           <div class="who"><span class="who-name" id="greatPersonName">Melanie Perkins</span><span class="who-role">Founder</span></div>
-          <div class="note" id="greatPersonNote">Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled[cite: 2].</div>
+          <div class="note" id="greatPersonNote">Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled.</div>
         </div>
         <div class="card">
           <div class="who"><span class="who-name" id="greatCoName">Canva</span><span class="who-role">Company</span></div>
-          <div class="note" id="greatCoNote">All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions[cite: 2].</div>
+          <div class="note" id="greatCoNote">All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions.</div>
         </div>
       </div>
 
@@ -804,11 +804,11 @@
         <div class="verdict-head poor"><span class="dot poor"></span>Missed It</div>
         <div class="card">
           <div class="who"><span class="who-name" id="poorPersonName">Adam Neumann</span><span class="who-role">Founder</span></div>
-          <div class="note" id="poorPersonNote">Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics[cite: 2].</div>
+          <div class="note" id="poorPersonNote">Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics.</div>
         </div>
         <div class="card">
           <div class="who"><span class="who-name" id="poorCoName">WeWork</span><span class="who-role">Company</span></div>
-          <div class="note" id="poorCoNote">Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics[cite: 2].</div>
+          <div class="note" id="poorCoNote">Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics.</div>
         </div>
       </div>
     </aside>
@@ -824,130 +824,130 @@
   const DATA = {
     love: {
       ikigai: "What You Love", vc: "Founder Passion",
-      desc: "Conviction that survives the years when the metrics say quit. Alone, it has no market, no craft, and no model behind it[cite: 2].",
-      great: { person:{name:"Sara Blakely", note:"Started with obsession and a small savings, no apparel expertise, no proven demand and no model, then built the product, market and revenue around the conviction[cite: 2]."}, company:{name:"Spanx", note:"Grew from one founder's belief into a category by adding the craft, the market and the economics that raw passion alone never guarantees[cite: 2]."} },
-      poor: { person:{name:"Ben Kaufman", note:"Channelled real inventor passion into a community for making products, but never built the discipline or the model to sustain it[cite: 2]."}, company:{name:"Quirky", note:"Passion for invention outran any durable skill or economics; the company burned through funding and filed for bankruptcy in 2015[cite: 2]."} }
+      desc: "Conviction that survives the years when the metrics say quit. Alone, it has no market, no craft, and no model behind it.",
+      great: { person:{name:"Sara Blakely", note:"Started with obsession and a small savings, no apparel expertise, no proven demand and no model, then built the product, market and revenue around the conviction."}, company:{name:"Spanx", note:"Grew from one founder's belief into a category by adding the craft, the market and the economics that raw passion alone never guarantees."} },
+      poor: { person:{name:"Ben Kaufman", note:"Channelled real inventor passion into a community for making products, but never built the discipline or the model to sustain it."}, company:{name:"Quirky", note:"Passion for invention outran any durable skill or economics; the company burned through funding and filed for bankruptcy in 2015."} }
     },
     worldneeds: {
       ikigai: "What The World Needs", vc: "Market Need",
-      desc: "A large, urgent, underserved demand. Alone, no one on the team loves it, can build it, or has priced it[cite: 2].",
-      great: { person:{name:"Neil Blumenthal", note:"Spotted an obvious unmet need, affordable eyewear, without starting from personal obsession, then built the brand craft and the model around it[cite: 2]."}, company:{name:"Warby Parker", note:"Began from a clear market gap rather than founder passion, and added the skill and economics needed to hold it[cite: 2]."} },
-      poor: { person:{name:"Julie Wainwright", note:"Bet on a real-looking demand for online pet supply with no workable economics, edge or deep conviction underneath[cite: 2]."}, company:{name:"Pets.com", note:"A genuine-seeming need with no viable model or moat; it collapsed within a year of its 2000 IPO[cite: 2]."} }
+      desc: "A large, urgent, underserved demand. Alone, no one on the team loves it, can build it, or has priced it.",
+      great: { person:{name:"Neil Blumenthal", note:"Spotted an obvious unmet need, affordable eyewear, without starting from personal obsession, then built the brand craft and the model around it."}, company:{name:"Warby Parker", note:"Began from a clear market gap rather than founder passion, and added the skill and economics needed to hold it."} },
+      poor: { person:{name:"Julie Wainwright", note:"Bet on a real-looking demand for online pet supply with no workable economics, edge or deep conviction underneath."}, company:{name:"Pets.com", note:"A genuine-seeming need with no viable model or moat; it collapsed within a year of its 2000 IPO."} }
     },
     goodat: {
       ikigai: "What You're Good At", vc: "Right To Win",
-      desc: "Durable, hard-to-copy expertise. Alone, the skill points at no market, no passion and no revenue[cite: 2].",
-      great: { person:{name:"Demis Hassabis", note:"Assembled world-class research capability with no product, market or revenue, then found application and a model through Google[cite: 2]."}, company:{name:"DeepMind", note:"Pure technical depth for years without a business; the market and economics arrived only once the skill was pointed at real problems[cite: 2]."} },
-      poor: { person:{name:"Rony Abovitz", note:"Marshalled dazzling engineering talent with no real market or model to put it to work[cite: 2]."}, company:{name:"Magic Leap", note:"Extraordinary capability and billions raised, but no demand or economics beneath it; valuation and ambitions collapsed[cite: 2]."} }
+      desc: "Durable, hard-to-copy expertise. Alone, the skill points at no market, no passion and no revenue.",
+      great: { person:{name:"Demis Hassabis", note:"Assembled world-class research capability with no product, market or revenue, then found application and a model through Google."}, company:{name:"DeepMind", note:"Pure technical depth for years without a business; the market and economics arrived only once the skill was pointed at real problems."} },
+      poor: { person:{name:"Rony Abovitz", note:"Marshalled dazzling engineering talent with no real market or model to put it to work."}, company:{name:"Magic Leap", note:"Extraordinary capability and billions raised, but no demand or economics beneath it; valuation and ambitions collapsed."} }
     },
     paidfor: {
       ikigai: "What You Can Be Paid For", vc: "Monetization",
-      desc: "A model where customers pay enough, repeatedly, to make the unit economics work. Alone, the model sits under no real demand, craft or conviction[cite: 2].",
-      great: { person:{name:"Jay Walker", note:"Started from a pricing and revenue mechanic, name-your-own-price, and built genuine demand and capability around it[cite: 2]."}, company:{name:"Priceline", note:"A monetization idea first, later grounded in a real travel market and durable operations[cite: 2]."} },
-      poor: { person:{name:"Mitch Lowe", note:"Leaned on a headline-grabbing price as the whole business, with no sustainable model, edge or real alignment[cite: 2]."}, company:{name:"MoviePass", note:"A monetization gimmick with nothing durable underneath; unit economics were upside down and it imploded[cite: 2]."} }
+      desc: "A model where customers pay enough, repeatedly, to make the unit economics work. Alone, the model sits under no real demand, craft or conviction.",
+      great: { person:{name:"Jay Walker", note:"Started from a pricing and revenue mechanic, name-your-own-price, and built genuine demand and capability around it."}, company:{name:"Priceline", note:"A monetization idea first, later grounded in a real travel market and durable operations."} },
+      poor: { person:{name:"Mitch Lowe", note:"Leaned on a headline-grabbing price as the whole business, with no sustainable model, edge or real alignment."}, company:{name:"MoviePass", note:"A monetization gimmick with nothing durable underneath; unit economics were upside down and it imploded."} }
     },
     mission: {
       ikigai: "Mission", vc: "Founder-Market",
-      desc: "Love plus real-world need. On its own, still missing the craft to build it and a way to charge[cite: 2].",
-      great: { person:{name:"Luis von Ahn", note:"Paired a genuine mission for accessible education with a vast real need, then built the technical craft and the model it required[cite: 2]."}, company:{name:"Duolingo", note:"Started from love and need, and closed the gap by adding gamified skill and a working freemium model[cite: 2]."} },
-      poor: { person:{name:"Shai Agassi", note:"Combined real climate conviction with a real need for EV infrastructure, but lacked the automotive engineering depth and the economics[cite: 2]."}, company:{name:"Better Place", note:"Passion and demand were real; the missing skill and viable model sank roughly $850M by its 2013 bankruptcy[cite: 2]."} }
+      desc: "Love plus real-world need. On its own, still missing the craft to build it and a way to charge.",
+      great: { person:{name:"Luis von Ahn", note:"Paired a genuine mission for accessible education with a vast real need, then built the technical craft and the model it required."}, company:{name:"Duolingo", note:"Started from love and need, and closed the gap by adding gamified skill and a working freemium model."} },
+      poor: { person:{name:"Shai Agassi", note:"Combined real climate conviction with a real need for EV infrastructure, but lacked the automotive engineering depth and the economics."}, company:{name:"Better Place", note:"Passion and demand were real; the missing skill and viable model sank roughly $850M by its 2013 bankruptcy."} }
     },
     passion: {
       ikigai: "Passion", vc: "Founder-Market Fit",
-      desc: "Love plus skill. On its own, still missing real demand and a way to charge[cite: 2].",
-      great: { person:{name:"Dylan Field", note:"Loved the problem and had deep technical craft in browser graphics, then found the real market and model for collaborative design[cite: 2]."}, company:{name:"Figma", note:"Love and skill came first; enduring value arrived once genuine demand and a model were added[cite: 2]."} },
-      poor: { person:{name:"Dave Morin", note:"Built a beautifully crafted product he cared about, without the real demand or model to carry it[cite: 2]."}, company:{name:"Path", note:"Elegant and loved by its makers, but no market at scale or durable economics; it shut down[cite: 2]."} }
+      desc: "Love plus skill. On its own, still missing real demand and a way to charge.",
+      great: { person:{name:"Dylan Field", note:"Loved the problem and had deep technical craft in browser graphics, then found the real market and model for collaborative design."}, company:{name:"Figma", note:"Love and skill came first; enduring value arrived once genuine demand and a model were added."} },
+      poor: { person:{name:"Dave Morin", note:"Built a beautifully crafted product he cared about, without the real demand or model to carry it."}, company:{name:"Path", note:"Elegant and loved by its makers, but no market at scale or durable economics; it shut down."} }
     },
     vocation: {
       ikigai: "Vocation", vc: "Scalable Timing",
-      desc: "Need plus monetization. On its own, still missing genuine conviction and a durable edge[cite: 2].",
-      great: { person:{name:"Tony Xu", note:"Seized a clear need with an obvious model in a crowded, copyable market, then built the logistics skill and conviction to outlast rivals[cite: 2]."}, company:{name:"DoorDash", note:"Need and economics were the starting point; survival came from adding operational depth others lacked[cite: 2]."} },
-      poor: { person:{name:"Matt Salzberg", note:"Rode real demand with a clear subscription model, but without a defensible edge to protect it[cite: 2]."}, company:{name:"Blue Apron", note:"Need and monetization were present; with no moat, larger players eroded the business[cite: 2]."} }
+      desc: "Need plus monetization. On its own, still missing genuine conviction and a durable edge.",
+      great: { person:{name:"Tony Xu", note:"Seized a clear need with an obvious model in a crowded, copyable market, then built the logistics skill and conviction to outlast rivals."}, company:{name:"DoorDash", note:"Need and economics were the starting point; survival came from adding operational depth others lacked."} },
+      poor: { person:{name:"Matt Salzberg", note:"Rode real demand with a clear subscription model, but without a defensible edge to protect it."}, company:{name:"Blue Apron", note:"Need and monetization were present; with no moat, larger players eroded the business."} }
     },
     profession: {
       ikigai: "Profession", vc: "Defensible Model",
-      desc: "Skill plus monetization. On its own, still missing real demand and a reason to care[cite: 2].",
-      great: { person:{name:"Jensen Huang", note:"Ran a deeply skilled, well-monetized graphics business for years before AI created the enormous demand that made it essential[cite: 2]."}, company:{name:"NVIDIA", note:"Skill and economics existed long before the market did; the missing need arrived and completed the picture[cite: 2]."} },
-      poor: { person:{name:"J Allard", note:"Delivered competent hardware with a clear model, but against no real unmet need and with little conviction behind it[cite: 2]."}, company:{name:"Microsoft Zune", note:"Skilled and monetizable, yet with no demand it didn't already cede to the iPod; it faded out[cite: 2]."} }
+      desc: "Skill plus monetization. On its own, still missing real demand and a reason to care.",
+      great: { person:{name:"Jensen Huang", note:"Ran a deeply skilled, well-monetized graphics business for years before AI created the enormous demand that made it essential."}, company:{name:"NVIDIA", note:"Skill and economics existed long before the market did; the missing need arrived and completed the picture."} },
+      poor: { person:{name:"J Allard", note:"Delivered competent hardware with a clear model, but against no real unmet need and with little conviction behind it."}, company:{name:"Microsoft Zune", note:"Skilled and monetizable, yet with no demand it didn't already cede to the iPod; it faded out."} }
     },
     tri_nomodel: {
       ikigai: "Delight & fullness, but no wealth", vc: "No Business Model",
-      desc: "Loved by users, genuinely needed, and well built, with no way to turn any of it into revenue. Three ingredients present; monetization missing[cite: 2].",
-      great: { person:{name:"Chad Hurley", note:"Ran a beloved, in-demand, technically strong product that launched unmonetized, then closed the gap by pairing it with Google's advertising engine[cite: 2]."}, company:{name:"YouTube", note:"Had love, need and engineering long before a model; monetization arrived only once ads were bottled on post-acquisition[cite: 2]."} },
-      poor: { person:{name:"Dom Hofmann", note:"Built a culturally beloved, technically excellent product, but no revenue path to pay creators or sustain it was ever established[cite: 2]."}, company:{name:"Vine", note:"Adored and widely used with strong tech, yet Twitter never built a business model around it; shut down in 2017[cite: 2]."} }
+      desc: "Loved by users, genuinely needed, and well built, with no way to turn any of it into revenue. Three ingredients present; monetization missing.",
+      great: { person:{name:"Chad Hurley", note:"Ran a beloved, in-demand, technically strong product that launched unmonetized, then closed the gap by pairing it with Google's advertising engine."}, company:{name:"YouTube", note:"Had love, need and engineering long before a model; monetization arrived only once ads were bottled on post-acquisition."} },
+      poor: { person:{name:"Dom Hofmann", note:"Built a culturally beloved, technically excellent product, but no revenue path to pay creators or sustain it was ever established."}, company:{name:"Vine", note:"Adored and widely used with strong tech, yet Twitter never built a business model around it; shut down in 2017."} }
     },
     tri_nowin: {
       ikigai: "Excitement & complacency, but uncertainty", vc: "No Right to Win",
-      desc: "Wanted, monetizable, and driven by real energy, but with no durable edge, so anyone can copy it. Three ingredients present; defensibility missing[cite: 2].",
-      great: { person:{name:"Travis Kalanick", note:"Started from trivially copyable mechanics but compounded network density, scale and logistics into a genuine moat over time[cite: 2]."}, company:{name:"Uber", note:"Early operations were easy to clone; durable advantage came only from relentless density and scale, not the original idea[cite: 2]."} },
-      poor: { person:{name:"Andrew Mason", note:"Rode real demand with a clear revenue model, but nothing stopped competitors from cloning it wholesale[cite: 2]."}, company:{name:"Groupon", note:"Genuine appetite and clear economics, but zero defensibility invited copycats; growth and margins eroded fast[cite: 2]."} }
+      desc: "Wanted, monetizable, and driven by real energy, but with no durable edge, so anyone can copy it. Three ingredients present; defensibility missing.",
+      great: { person:{name:"Travis Kalanick", note:"Started from trivially copyable mechanics but compounded network density, scale and logistics into a genuine moat over time."}, company:{name:"Uber", note:"Early operations were easy to clone; durable advantage came only from relentless density and scale, not the original idea."} },
+      poor: { person:{name:"Andrew Mason", note:"Rode real demand with a clear revenue model, but nothing stopped competitors from cloning it wholesale."}, company:{name:"Groupon", note:"Genuine appetite and clear economics, but zero defensibility invited copycats; growth and margins eroded fast."} }
     },
     tri_nomarket: {
       ikigai: "Satisfaction, but a feeling of uselessness", vc: "No Market Need",
-      desc: "Founder passion, real craft, and a workable price, aimed at demand that wasn't actually there. Three ingredients present; market need missing[cite: 2].",
-      great: { person:{name:"Stewart Butterfield", note:"Poured skill and a viable model into a game nobody wanted, then redirected the same team at a real, urgent need for team messaging[cite: 2]."}, company:{name:"Slack", note:"Emerged from the wreckage of a game (Glitch) by pointing existing craft and economics at demand that genuinely existed[cite: 2]."} },
-      poor: { person:{name:"Doug Evans", note:"Beautifully engineered a monetizable product he loved, without confirming anyone actually needed it[cite: 2]."}, company:{name:"Juicero", note:"Elegant hardware and a subscription model, but almost no one needed a $400 connected juice press; shut down in 2017[cite: 2]."} }
+      desc: "Founder passion, real craft, and a workable price, aimed at demand that wasn't actually there. Three ingredients present; market need missing.",
+      great: { person:{name:"Stewart Butterfield", note:"Poured skill and a viable model into a game nobody wanted, then redirected the same team at a real, urgent need for team messaging."}, company:{name:"Slack", note:"Emerged from the wreckage of a game (Glitch) by pointing existing craft and economics at demand that genuinely existed."} },
+      poor: { person:{name:"Doug Evans", note:"Beautifully engineered a monetizable product he loved, without confirming anyone actually needed it."}, company:{name:"Juicero", note:"Elegant hardware and a subscription model, but almost no one needed a $400 connected juice press; shut down in 2017."} }
     },
     tri_noconv: {
       ikigai: "Comfortable, but a feeling of emptiness", vc: "No Founder Conviction",
-      desc: "Skilled, needed, and monetizable, but built defensively, with no genuine founder belief to carry the hard calls. Three ingredients present; conviction missing[cite: 2].",
-      great: { person:{name:"Satya Nadella", note:"Microsoft already had the skill, market and model; a renewed sense of mission and culture is what finally converted latent capability into cloud leadership[cite: 2]."}, company:{name:"Microsoft Azure", note:"The technical and commercial pieces existed for years; conviction and cultural change unlocked them[cite: 2]."} },
-      poor: { person:{name:"Vic Gundotra", note:"Marshaled enormous resources against a real-seeming need, but the effort was a strategic reaction rather than a conviction[cite: 2]."}, company:{name:"Google+", note:"Skilled, resourced and monetizable, yet built to answer Facebook rather than from belief; shut down in 2019[cite: 2]."} }
+      desc: "Skilled, needed, and monetizable, but built defensively, with no genuine founder belief to carry the hard calls. Three ingredients present; conviction missing.",
+      great: { person:{name:"Satya Nadella", note:"Microsoft already had the skill, market and model; a renewed sense of mission and culture is what finally converted latent capability into cloud leadership."}, company:{name:"Microsoft Azure", note:"The technical and commercial pieces existed for years; conviction and cultural change unlocked them."} },
+      poor: { person:{name:"Vic Gundotra", note:"Marshaled enormous resources against a real-seeming need, but the effort was a strategic reaction rather than a conviction."}, company:{name:"Google+", note:"Skilled, resourced and monetizable, yet built to answer Facebook rather than from belief; shut down in 2019."} }
     },
     center: {
       ikigai: "Ikigai", vc: "The Fundable Deal",
-      desc: "All four circles overlap: a founder who loves the problem, is uniquely equipped to solve it, that the market urgently needs, priced in a way people will pay for[cite: 2].",
-      great: { person:{name:"Melanie Perkins", note:"Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled[cite: 2]."}, company:{name:"Canva", note:"All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions[cite: 2]."} },
-      poor: { person:{name:"Adam Neumann", note:"Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics[cite: 2]."}, company:{name:"WeWork", note:"Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics[cite: 2]."} }
+      desc: "All four circles overlap: a founder who loves the problem, is uniquely equipped to solve it, that the market urgently needs, priced in a way people will pay for.",
+      great: { person:{name:"Melanie Perkins", note:"Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled."}, company:{name:"Canva", note:"All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions."} },
+      poor: { person:{name:"Adam Neumann", note:"Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics."}, company:{name:"WeWork", note:"Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics."} }
     }
   };
 
   const SEARCH_REGISTRY = {
-    "canva": { tier: "success", target: "center", x: "45.5%", y: "43.5%", label: "Canva Pro", f: "Melanie Perkins", n: "Successfully aligned layout product mechanics against screaming global digital marketing design demands[cite: 2]." },
-    "wework": { tier: "fail", target: "center", x: "53.5%", y: "53.5%", label: "WeWork", f: "Adam Neumann", n: "Collided with systemic private valuation corrections once public compliance vectors audited deep long-term asset deficits[cite: 2]." },
+    "canva": { tier: "success", target: "center", x: "45.5%", y: "43.5%", label: "Canva Pro", f: "Melanie Perkins", n: "Successfully aligned layout product mechanics against screaming global digital marketing design demands." },
+    "wework": { tier: "fail", target: "center", x: "53.5%", y: "53.5%", label: "WeWork", f: "Adam Neumann", n: "Collided with systemic private valuation corrections once public compliance vectors audited deep long-term asset deficits." },
     "tesla": { tier: "success", target: "center", x: "49%", y: "49%", label: "Tesla Motors", f: "Elon Musk", n: "Successfully integrated absolute sustainable energy passion layers into scalable high-margin premium consumer hardware matrices." },
     
-    "spanx": { tier: "success", target: "love", x: "14%", y: "14%", label: "Spanx", f: "Sara Blakely", n: "Constructed deep multi-generation infrastructure solely off persistent customer obsession loops without initial industry backing[cite: 2]." },
-    "quirky": { tier: "fail", target: "love", x: "20%", y: "20%", label: "Quirky Inc.", f: "Ben Kaufman", n: "Invention play fueled completely by raw crowd passion that ran entirely dry of strict structural capital safeguards[cite: 2]." },
+    "spanx": { tier: "success", target: "love", x: "14%", y: "14%", label: "Spanx", f: "Sara Blakely", n: "Constructed deep multi-generation infrastructure solely off persistent customer obsession loops without initial industry backing." },
+    "quirky": { tier: "fail", target: "love", x: "20%", y: "20%", label: "Quirky Inc.", f: "Ben Kaufman", n: "Invention play fueled completely by raw crowd passion that ran entirely dry of strict structural capital safeguards." },
     
-    "warby parker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows[cite: 2]." },
-    "warbyparker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows[cite: 2]." },
-    "pets.com": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics[cite: 2]." },
-    "petscom": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics[cite: 2]." },
+    "warby parker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows." },
+    "warbyparker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows." },
+    "pets.com": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics." },
+    "petscom": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics." },
     
-    "deepmind": { tier: "success", target: "goodat", x: "14%", y: "82%", label: "DeepMind", f: "Demis Hassabis", n: "Maintained absolute deep exploratory domain expertise fields until integration inside Google accelerated global monetization[cite: 2]." },
-    "magic leap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures[cite: 2]." },
-    "magicleap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures[cite: 2]." },
+    "deepmind": { tier: "success", target: "goodat", x: "14%", y: "82%", label: "DeepMind", f: "Demis Hassabis", n: "Maintained absolute deep exploratory domain expertise fields until integration inside Google accelerated global monetization." },
+    "magic leap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures." },
+    "magicleap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures." },
     
-    "priceline": { tier: "success", target: "paidfor", x: "82%", y: "82%", label: "Priceline", f: "Jay Walker", n: "Constructed conditional pricing options that structurally unlocked decaying, unmonetized hotel and flight seat excess safely[cite: 2]." },
-    "moviepass": { tier: "fail", target: "paidfor", x: "76%", y: "76%", label: "MoviePass", f: "Mitch Lowe", n: "Offered raw customer growth pricing engines entirely uncoupled from baseline unit distribution economics[cite: 2]." },
+    "priceline": { tier: "success", target: "paidfor", x: "82%", y: "82%", label: "Priceline", f: "Jay Walker", n: "Constructed conditional pricing options that structurally unlocked decaying, unmonetized hotel and flight seat excess safely." },
+    "moviepass": { tier: "fail", target: "paidfor", x: "76%", y: "76%", label: "MoviePass", f: "Mitch Lowe", n: "Offered raw customer growth pricing engines entirely uncoupled from baseline unit distribution economics." },
     
-    "duolingo": { tier: "success", target: "mission", x: "47%", y: "22%", label: "Duolingo", f: "Luis von Ahn", n: "Captured massive language training intents using self-sustaining gamified loops[cite: 2]." },
-    "better place": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities[cite: 2]." },
-    "betterplace": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities[cite: 2]." },
+    "duolingo": { tier: "success", target: "mission", x: "47%", y: "22%", label: "Duolingo", f: "Luis von Ahn", n: "Captured massive language training intents using self-sustaining gamified loops." },
+    "better place": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities." },
+    "betterplace": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities." },
     
-    "figma": { tier: "success", target: "passion", x: "22%", y: "47%", label: "Figma", f: "Dylan Field", n: "Paired personal enthusiasm for browser rendering paths with browser-native WebGL technology structures[cite: 2]." },
-    "path": { tier: "fail", target: "passion", x: "22%", y: "51.5%", label: "Path Social", f: "Dave Morin", n: "Maintained beautiful interface craft variables while completely dropping the distribution vectors required to hit networks scale[cite: 2]." },
+    "figma": { tier: "success", target: "passion", x: "22%", y: "47%", label: "Figma", f: "Dylan Field", n: "Paired personal enthusiasm for browser rendering paths with browser-native WebGL technology structures." },
+    "path": { tier: "fail", target: "passion", x: "22%", y: "51.5%", label: "Path Social", f: "Dave Morin", n: "Maintained beautiful interface craft variables while completely dropping the distribution vectors required to hit networks scale." },
     
-    "doordash": { tier: "success", target: "vocation", x: "76.5%", y: "47%", label: "DoorDash", f: "Tony Xu", n: "Out-executed early market leaders by locking down logistics densities directly across secondary suburban markets[cite: 2]." },
-    "blue apron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants[cite: 2]." },
-    "blueapron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants[cite: 2]." },
+    "doordash": { tier: "success", target: "vocation", x: "76.5%", y: "47%", label: "DoorDash", f: "Tony Xu", n: "Out-executed early market leaders by locking down logistics densities directly across secondary suburban markets." },
+    "blue apron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants." },
+    "blueapron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants." },
     
-    "nvidia": { tier: "success", target: "profession", x: "47%", y: "76.5%", label: "NVIDIA", f: "Jensen Huang", n: "Sustained high hardware processing power pipelines for decades until modern deep learning grids triggered global macro draw[cite: 2]." },
-    "zune": { tier: "fail", target: "profession", x: "51.5%", y: "76.5%", label: "Microsoft Zune", f: "J Allard", n: "Technically competent asset built as a corporate defense system rather than out of deep original marketplace alignment[cite: 2]." },
+    "nvidia": { tier: "success", target: "profession", x: "47%", y: "76.5%", label: "NVIDIA", f: "Jensen Huang", n: "Sustained high hardware processing power pipelines for decades until modern deep learning grids triggered global macro draw." },
+    "zune": { tier: "fail", target: "profession", x: "51.5%", y: "76.5%", label: "Microsoft Zune", f: "J Allard", n: "Technically competent asset built as a corporate defense system rather than out of deep original marketplace alignment." },
     
-    "youtube": { tier: "success", target: "tri_nomodel", x: "36.5%", y: "35.5%", label: "YouTube", f: "Chad Hurley", n: "Maintained staggering digital view velocity before shifting safely into Google's pre-established advertising pipelines[cite: 2]." },
-    "vine": { tier: "fail", target: "tri_nomodel", x: "38.5%", y: "41.5%", label: "Vine", f: "Dom Hofmann", n: "Pioneered viral short loops but failed to integrate programmatic monetization, losing creators to alternative ad systems[cite: 2]." },
+    "youtube": { tier: "success", target: "tri_nomodel", x: "36.5%", y: "35.5%", label: "YouTube", f: "Chad Hurley", n: "Maintained staggering digital view velocity before shifting safely into Google's pre-established advertising pipelines." },
+    "vine": { tier: "fail", target: "tri_nomodel", x: "38.5%", y: "41.5%", label: "Vine", f: "Dom Hofmann", n: "Pioneered viral short loops but failed to integrate programmatic monetization, losing creators to alternative ad systems." },
     
-    "uber": { tier: "success", target: "tri_nowin", x: "60.5%", y: "35.5%", label: "Uber", f: "Travis Kalanick", n: "Compounded unmoated consumer booking code engines into unassailable moats via rapid local driver liquidities scale[cite: 2]." },
-    "groupon": { tier: "meh", target: "tri_nowin", x: "58.5%", y: "41.5%", label: "Groupon", f: "Andrew Mason", n: "Rapid direct e-mail monetization infrastructure that suffered heavily from easy cloning by competitive copycats[cite: 2]." },
+    "uber": { tier: "success", target: "tri_nowin", x: "60.5%", y: "35.5%", label: "Uber", f: "Travis Kalanick", n: "Compounded unmoated consumer booking code engines into unassailable moats via rapid local driver liquidities scale." },
+    "groupon": { tier: "meh", target: "tri_nowin", x: "58.5%", y: "41.5%", label: "Groupon", f: "Andrew Mason", n: "Rapid direct e-mail monetization infrastructure that suffered heavily from easy cloning by competitive copycats." },
     
-    "slack": { tier: "success", target: "tri_nomarket", x: "36.5%", y: "60.5%", label: "Slack", f: "Stewart Butterfield", n: "Realized an unviable product map (Glitch) could be saved by extracting and externalizing its custom communications framework[cite: 2]." },
-    "juicero": { tier: "fail", target: "tri_nomarket", x: "38.5%", y: "54.5%", label: "Juicero", f: "Doug Evans", n: "Constructed premium internal micro-engineered components for problems easily resolved by simple manual compression[cite: 2]." },
+    "slack": { tier: "success", target: "tri_nomarket", x: "36.5%", y: "60.5%", label: "Slack", f: "Stewart Butterfield", n: "Realized an unviable product map (Glitch) could be saved by extracting and externalizing its custom communications framework." },
+    "juicero": { tier: "fail", target: "tri_nomarket", x: "38.5%", y: "54.5%", label: "Juicero", f: "Doug Evans", n: "Constructed premium internal micro-engineered components for problems easily resolved by simple manual compression." },
     
-    "azure": { tier: "success", target: "tri_noconv", x: "60.5%", y: "60.5%", label: "Microsoft Azure", f: "Satya Nadella", n: "Successfully aligned latent enterprise relationships directly behind functional distributed infrastructure models[cite: 2]." },
-    "google+": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors[cite: 2]." },
-    "googleplus": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors[cite: 2]." }
+    "azure": { tier: "success", target: "tri_noconv", x: "60.5%", y: "60.5%", label: "Microsoft Azure", f: "Satya Nadella", n: "Successfully aligned latent enterprise relationships directly behind functional distributed infrastructure models." },
+    "google+": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors." },
+    "googleplus": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors." }
   };
 
   const body = document.body;
