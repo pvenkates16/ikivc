@@ -527,9 +527,60 @@
     color:#AEB5BF;
   }
 
-  .hidden-block {
-    display: none !important;
+  .scorecard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0 0 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #232E3B;
   }
+  .sc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    background: var(--ink-3);
+    border: 1px solid #29333F;
+    border-radius: 10px;
+    padding: 10px 12px;
+    transition: border-color .2s;
+  }
+  .sc-item.has  { border-color: #2A4A3A; }
+  .sc-item.missing { border-color: #3A2A28; opacity: .72; }
+  .sc-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+  .sc-item.has .sc-icon   { background: #1A3028; color: #6FBF9A; }
+  .sc-item.missing .sc-icon { background: #2A1A18; color: #C77B6B; }
+  .sc-text { flex: 1; min-width: 0; }
+  .sc-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-text-dim);
+    margin-bottom: 3px;
+  }
+  .sc-name {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--paper);
+    margin-bottom: 3px;
+  }
+  .sc-reason {
+    font-size: 11px;
+    line-height: 1.45;
+    color: #7A8390;
+  }
+  .sc-item.has .sc-reason  { color: #8EB5A0; }
+  .sc-item.missing .sc-reason { color: #9A6A62; }
+
+
 
   @keyframes dot-enter {
     0%   { transform: scale(0) rotate(-45deg); opacity: 0; }
@@ -788,6 +839,9 @@
       <p class="ikigai-name" id="panelIkigai">Interactive Investment Mapping</p>
       <p class="desc" id="panelDesc">Submit an entry in the search pipeline above. Valid targets generate customized coordinate vector circle layers to audit tactical alignment gaps.</p>
 
+      <!-- Four-dimension coverage scorecard -->
+      <div class="scorecard" id="scorecard" style="display:none"></div>
+
       <div class="verdict-block" id="blockGreat">
         <div class="verdict-head great"><span class="dot great"></span>Got It Right</div>
         <div class="card">
@@ -903,54 +957,195 @@
   };
 
   const SEARCH_REGISTRY = {
-    "canva": { tier: "success", target: "center", x: "45.5%", y: "43.5%", label: "Canva Pro", f: "Melanie Perkins", n: "Successfully aligned layout product mechanics against screaming global digital marketing design demands." },
-    "wework": { tier: "fail", target: "center", x: "53.5%", y: "53.5%", label: "WeWork", f: "Adam Neumann", n: "Collided with systemic private valuation corrections once public compliance vectors audited deep long-term asset deficits." },
-    "tesla": { tier: "success", target: "center", x: "49%", y: "49%", label: "Tesla Motors", f: "Elon Musk", n: "Successfully integrated absolute sustainable energy passion layers into scalable high-margin premium consumer hardware matrices." },
-    
-    "spanx": { tier: "success", target: "love", x: "14%", y: "14%", label: "Spanx", f: "Sara Blakely", n: "Constructed deep multi-generation infrastructure solely off persistent customer obsession loops without initial industry backing." },
-    "quirky": { tier: "fail", target: "love", x: "20%", y: "20%", label: "Quirky Inc.", f: "Ben Kaufman", n: "Invention play fueled completely by raw crowd passion that ran entirely dry of strict structural capital safeguards." },
-    
-    "warby parker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows." },
-    "warbyparker": { tier: "success", target: "worldneeds", x: "82%", y: "14%", label: "Warby Parker", f: "Neil Blumenthal", n: "Attacked entrenched, monopolized optical eyewear margin frameworks using robust direct-to-consumer digital workflows." },
-    "pets.com": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics." },
-    "petscom": { tier: "fail", target: "worldneeds", x: "76%", y: "20%", label: "Pets.com", f: "Julie Wainwright", n: "Assumed rapid digital customer demand curves without establishing positive standalone distribution unit economics." },
-    
-    "deepmind": { tier: "success", target: "goodat", x: "14%", y: "82%", label: "DeepMind", f: "Demis Hassabis", n: "Maintained absolute deep exploratory domain expertise fields until integration inside Google accelerated global monetization." },
-    "magic leap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures." },
-    "magicleap": { tier: "fail", target: "goodat", x: "20%", y: "76%", label: "Magic Leap", f: "Rony Abovitz", n: "Engineered incredible hardware assets separated from realistic daily developer ecosystem pricing architectures." },
-    
-    "priceline": { tier: "success", target: "paidfor", x: "82%", y: "82%", label: "Priceline", f: "Jay Walker", n: "Constructed conditional pricing options that structurally unlocked decaying, unmonetized hotel and flight seat excess safely." },
-    "moviepass": { tier: "fail", target: "paidfor", x: "76%", y: "76%", label: "MoviePass", f: "Mitch Lowe", n: "Offered raw customer growth pricing engines entirely uncoupled from baseline unit distribution economics." },
-    
-    "duolingo": { tier: "success", target: "mission", x: "47%", y: "22%", label: "Duolingo", f: "Luis von Ahn", n: "Captured massive language training intents using self-sustaining gamified loops." },
-    "better place": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities." },
-    "betterplace": { tier: "fail", target: "mission", x: "51.5%", y: "22%", label: "Better Place", f: "Shai Agassi", n: "EV grid project that attempted capital deployment speeds disconnected from synchronized auto manufacturing realities." },
-    
-    "figma": { tier: "success", target: "passion", x: "22%", y: "47%", label: "Figma", f: "Dylan Field", n: "Paired personal enthusiasm for browser rendering paths with browser-native WebGL technology structures." },
-    "path": { tier: "fail", target: "passion", x: "22%", y: "51.5%", label: "Path Social", f: "Dave Morin", n: "Maintained beautiful interface craft variables while completely dropping the distribution vectors required to hit networks scale." },
-    
-    "doordash": { tier: "success", target: "vocation", x: "76.5%", y: "47%", label: "DoorDash", f: "Tony Xu", n: "Out-executed early market leaders by locking down logistics densities directly across secondary suburban markets." },
-    "blue apron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants." },
-    "blueapron": { tier: "fail", target: "vocation", x: "76.5%", y: "51.5%", label: "Blue Apron", f: "Matt Salzberg", n: "D2C food box subscription that lacked competitive moats, inviting immediate replication from standard grocery giants." },
-    
-    "nvidia": { tier: "success", target: "profession", x: "47%", y: "76.5%", label: "NVIDIA", f: "Jensen Huang", n: "Sustained high hardware processing power pipelines for decades until modern deep learning grids triggered global macro draw." },
-    "zune": { tier: "fail", target: "profession", x: "51.5%", y: "76.5%", label: "Microsoft Zune", f: "J Allard", n: "Technically competent asset built as a corporate defense system rather than out of deep original marketplace alignment." },
-    
-    "youtube": { tier: "success", target: "tri_nomodel", x: "36.5%", y: "35.5%", label: "YouTube", f: "Chad Hurley", n: "Maintained staggering digital view velocity before shifting safely into Google's pre-established advertising pipelines." },
-    "vine": { tier: "fail", target: "tri_nomodel", x: "38.5%", y: "41.5%", label: "Vine", f: "Dom Hofmann", n: "Pioneered viral short loops but failed to integrate programmatic monetization, losing creators to alternative ad systems." },
-    
-    "uber": { tier: "success", target: "tri_nowin", x: "60.5%", y: "35.5%", label: "Uber", f: "Travis Kalanick", n: "Compounded unmoated consumer booking code engines into unassailable moats via rapid local driver liquidities scale." },
-    "groupon": { tier: "meh", target: "tri_nowin", x: "58.5%", y: "41.5%", label: "Groupon", f: "Andrew Mason", n: "Rapid direct e-mail monetization infrastructure that suffered heavily from easy cloning by competitive copycats." },
-    
-    "slack": { tier: "success", target: "tri_nomarket", x: "36.5%", y: "60.5%", label: "Slack", f: "Stewart Butterfield", n: "Realized an unviable product map (Glitch) could be saved by extracting and externalizing its custom communications framework." },
-    "juicero": { tier: "fail", target: "tri_nomarket", x: "38.5%", y: "54.5%", label: "Juicero", f: "Doug Evans", n: "Constructed premium internal micro-engineered components for problems easily resolved by simple manual compression." },
-    
-    "azure": { tier: "success", target: "tri_noconv", x: "60.5%", y: "60.5%", label: "Microsoft Azure", f: "Satya Nadella", n: "Successfully aligned latent enterprise relationships directly behind functional distributed infrastructure models." },
-    "google+": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors." },
-    "googleplus": { tier: "fail", target: "tri_noconv", x: "58.5%", y: "54.5%", label: "Google+", f: "Vic Gundotra", n: "Extensive resource engine launched entirely as a strategic reaction to Facebook without native conviction vectors." }
+
+    // ── CENTER: all four (love + need + skill + model) ──────────────────────
+    "canva":          { tier: "success", target: "center", x: "44%",   y: "43%",  label: "Canva",           f: "Melanie Perkins",    n: "All four aligned: founder obsession with design, massive underserved demand, strong product craft, and a freemium model that scaled to hundreds of millions." },
+    "tesla":          { tier: "success", target: "center", x: "49%",   y: "47%",  label: "Tesla",           f: "Elon Musk",          n: "Passion for electrification, urgent climate need, genuine engineering edge, and premium pricing that funded mass-market expansion." },
+    "spotify":        { tier: "success", target: "center", x: "46%",   y: "51%",  label: "Spotify",         f: "Daniel Ek",          n: "Deep love of music, global piracy demand, superior streaming UX, and a subscription model that converted free listeners into paying subscribers." },
+    "airbnb":         { tier: "success", target: "center", x: "52%",   y: "45%",  label: "Airbnb",          f: "Brian Chesky",       n: "Founder empathy for travellers, unmet demand for affordable local stays, strong trust infrastructure, and two-sided take-rate economics." },
+    "wework":         { tier: "fail",    target: "center", x: "54%",   y: "53%",  label: "WeWork",          f: "Adam Neumann",       n: "Real demand and passion, but the model was long-lease/short-sublease — structurally fragile; the IPO collapse exposed the unit economics." },
+
+    // ── LOVE only (passion, no skill / need / model) ─────────────────────────
+    "spanx":          { tier: "success", target: "love",   x: "13%",   y: "13%",  label: "Spanx",           f: "Sara Blakely",       n: "Started from pure personal obsession; no industry expertise, no proven demand, no model — built all three around the conviction." },
+    "quirky":         { tier: "fail",    target: "love",   x: "18%",   y: "18%",  label: "Quirky",          f: "Ben Kaufman",        n: "Community passion for invention with no durable skill layer or viable unit economics; burned through funding and filed for bankruptcy." },
+    "thrillist":      { tier: "meh",     target: "love",   x: "15%",   y: "22%",  label: "Thrillist",       f: "Ben Lerer",          n: "Founded on genuine love of city nightlife with no clear model; pivoted repeatedly before finding commerce, never reaching breakout scale." },
+    "color labs":     { tier: "fail",    target: "love",   x: "21%",   y: "14%",  label: "Color Labs",      f: "Bill Nguyen",        n: "$41M raised on founder enthusiasm for social photos before any skill validation or demand evidence; shut down within two years." },
+    "colorlabs":      { tier: "fail",    target: "love",   x: "21%",   y: "14%",  label: "Color Labs",      f: "Bill Nguyen",        n: "$41M raised on founder enthusiasm for social photos before any skill validation or demand evidence; shut down within two years." },
+    "fieldofneighbors":{ tier: "fail",   target: "love",   x: "23%",   y: "21%",  label: "Field of Neighbors", f: "Various",         n: "Hyper-local social passion project with no skill infrastructure or monetization path; remained a niche product with no traction." },
+
+    // ── WORLD NEEDS only (need, no love / skill / model) ─────────────────────
+    "warby parker":   { tier: "success", target: "worldneeds", x: "83%", y: "13%", label: "Warby Parker",   f: "Neil Blumenthal",    n: "Spotted a clear gap — overpriced eyewear — without starting from personal obsession; then added brand craft and DTC economics." },
+    "warbyparker":    { tier: "success", target: "worldneeds", x: "83%", y: "13%", label: "Warby Parker",   f: "Neil Blumenthal",    n: "Spotted a clear gap — overpriced eyewear — without starting from personal obsession; then added brand craft and DTC economics." },
+    "pets.com":       { tier: "fail",    target: "worldneeds", x: "77%", y: "19%", label: "Pets.com",       f: "Julie Wainwright",   n: "Real demand for online pet supply, but no viable logistics model or defensible edge; collapsed within a year of its 2000 IPO." },
+    "petscom":        { tier: "fail",    target: "worldneeds", x: "77%", y: "19%", label: "Pets.com",       f: "Julie Wainwright",   n: "Real demand for online pet supply, but no viable logistics model or defensible edge; collapsed within a year of its 2000 IPO." },
+    "webvan":         { tier: "fail",    target: "worldneeds", x: "80%", y: "23%", label: "Webvan",         f: "Louis Borders",      n: "Genuine consumer need for grocery delivery, but expanded infrastructure faster than demand and logistics unit economics could support." },
+    "planetout":      { tier: "meh",     target: "worldneeds", x: "86%", y: "18%", label: "PlanetOut",      f: "Megan Smith",        n: "Addressed a real underserved community need for LGBTQ+ media, but lacked a durable model as social platforms absorbed the audience." },
+    "care.com":       { tier: "success", target: "worldneeds", x: "84%", y: "22%", label: "Care.com",       f: "Sheila Marcelo",     n: "Identified a clear market gap in childcare and elder care matching; built the model and marketplace infrastructure around the need." },
+    "carecom":        { tier: "success", target: "worldneeds", x: "84%", y: "22%", label: "Care.com",       f: "Sheila Marcelo",     n: "Identified a clear market gap in childcare and elder care matching; built the model and marketplace infrastructure around the need." },
+
+    // ── GOOD AT only (skill, no love / need / model) ─────────────────────────
+    "deepmind":       { tier: "success", target: "goodat",  x: "13%",   y: "83%",  label: "DeepMind",       f: "Demis Hassabis",     n: "World-class research capability for years with no product or revenue; found application and a model through Google acquisition." },
+    "magic leap":     { tier: "fail",    target: "goodat",  x: "19%",   y: "77%",  label: "Magic Leap",     f: "Rony Abovitz",       n: "Extraordinary AR engineering with no real consumer demand or monetization; raised $2.6B and pivoted to enterprise after retail failure." },
+    "magicleap":      { tier: "fail",    target: "goodat",  x: "19%",   y: "77%",  label: "Magic Leap",     f: "Rony Abovitz",       n: "Extraordinary AR engineering with no real consumer demand or monetization; raised $2.6B and pivoted to enterprise after retail failure." },
+    "wolfram":        { tier: "meh",     target: "goodat",  x: "23%",   y: "80%",  label: "Wolfram Research",f: "Stephen Wolfram",    n: "Unmatched computational knowledge depth but chronically narrow market and no scalable model to convert skill into broad revenue." },
+    "wolfram research":{ tier: "meh",    target: "goodat",  x: "23%",   y: "80%",  label: "Wolfram Research",f: "Stephen Wolfram",    n: "Unmatched computational knowledge depth but chronically narrow market and no scalable model to convert skill into broad revenue." },
+    "d-wave":         { tier: "meh",     target: "goodat",  x: "16%",   y: "86%",  label: "D-Wave",         f: "Geordie Rose",       n: "Genuine quantum computing hardware skill, but limited practical applications and a revenue model still searching for its market." },
+    "dwave":          { tier: "meh",     target: "goodat",  x: "16%",   y: "86%",  label: "D-Wave",         f: "Geordie Rose",       n: "Genuine quantum computing hardware skill, but limited practical applications and a revenue model still searching for its market." },
+    "vicarious":      { tier: "fail",    target: "goodat",  x: "21%",   y: "84%",  label: "Vicarious",      f: "Scott Phoenix",      n: "Deep AI research talent backed by Zuckerberg and Musk, but no commercial product or monetization before being absorbed by Salesforce." },
+
+    // ── PAID FOR only (model, no love / need / skill) ────────────────────────
+    "priceline":      { tier: "success", target: "paidfor", x: "83%",   y: "83%",  label: "Priceline",      f: "Jay Walker",         n: "Built around a pricing mechanic — name-your-own-price — then found the travel market and operations to make it durable." },
+    "moviepass":      { tier: "fail",    target: "paidfor", x: "77%",   y: "77%",  label: "MoviePass",      f: "Mitch Lowe",         n: "A subscription price point with no sustainable unit economics underneath; burned through capital and collapsed." },
+    "zynga":          { tier: "meh",     target: "paidfor", x: "80%",   y: "80%",  label: "Zynga",          f: "Mark Pincus",        n: "Mastered virtual goods monetization mechanics but built on Facebook's platform with no defensible product love or moat." },
+    "gilt groupe":    { tier: "meh",     target: "paidfor", x: "86%",   y: "77%",  label: "Gilt Groupe",    f: "Kevin Ryan",         n: "Flash-sale model drove early revenue but no brand conviction or moat; sold to Hudson's Bay for a fraction of its peak valuation." },
+    "giltgroupe":     { tier: "meh",     target: "paidfor", x: "86%",   y: "77%",  label: "Gilt Groupe",    f: "Kevin Ryan",         n: "Flash-sale model drove early revenue but no brand conviction or moat; sold to Hudson's Bay for a fraction of its peak valuation." },
+    "fab.com":        { tier: "fail",    target: "paidfor", x: "84%",   y: "84%",  label: "Fab.com",        f: "Jason Goldberg",     n: "Flash-sale model copied from Gilt with no design conviction or skill; pivoted repeatedly before shutting down." },
+    "fabcom":         { tier: "fail",    target: "paidfor", x: "84%",   y: "84%",  label: "Fab.com",        f: "Jason Goldberg",     n: "Flash-sale model copied from Gilt with no design conviction or skill; pivoted repeatedly before shutting down." },
+
+    // ── MISSION: love + need (no skill / model) ───────────────────────────────
+    "duolingo":       { tier: "success", target: "mission", x: "45%",   y: "20%",  label: "Duolingo",       f: "Luis von Ahn",       n: "Passion for accessible education meeting vast real demand; closed the gap by adding gamified product skill and a freemium model." },
+    "better place":   { tier: "fail",    target: "mission", x: "50%",   y: "23%",  label: "Better Place",   f: "Shai Agassi",        n: "Genuine climate conviction and real EV infrastructure need; missing automotive engineering depth and viable unit economics." },
+    "betterplace":    { tier: "fail",    target: "mission", x: "50%",   y: "23%",  label: "Better Place",   f: "Shai Agassi",        n: "Genuine climate conviction and real EV infrastructure need; missing automotive engineering depth and viable unit economics." },
+    "kiva":           { tier: "success", target: "mission", x: "48%",   y: "18%",  label: "Kiva",           f: "Matt Flannery",      n: "Deep conviction in microfinance meeting a global need for credit access; built the platform skill and a donation-fee model around it." },
+    "theranos":       { tier: "fail",    target: "mission", x: "52%",   y: "20%",  label: "Theranos",       f: "Elizabeth Holmes",   n: "Genuine passion for democratising blood testing meeting massive healthcare need; the missing ingredient was the actual technical skill." },
+    "one laptop per child": { tier: "meh", target: "mission", x: "46%", y: "25%",  label: "One Laptop Per Child", f: "Nicholas Negroponte", n: "Strong educational conviction and clear global need, but the device lacked the software ecosystem and a sustainable distribution model." },
+    "olpc":           { tier: "meh",     target: "mission", x: "46%",   y: "25%",  label: "One Laptop Per Child", f: "Nicholas Negroponte", n: "Strong educational conviction and clear global need, but the device lacked the software ecosystem and a sustainable distribution model." },
+
+    // ── PASSION: love + skill (no need / model) ───────────────────────────────
+    "figma":          { tier: "success", target: "passion", x: "20%",   y: "45%",  label: "Figma",          f: "Dylan Field",        n: "Love of browser-native graphics combined with deep WebGL skill; found the real design collaboration market and a SaaS model." },
+    "path":           { tier: "fail",    target: "passion", x: "23%",   y: "50%",  label: "Path",           f: "Dave Morin",         n: "Beautifully crafted social app from a passionate team; no mass market demand or monetization ever materialised." },
+    "portfolio":      { tier: "fail",    target: "passion", x: "18%",   y: "52%",  label: "Posterous",      f: "Sachin Agarwal",     n: "Loved and well-built blogging tool with no model and a market already dominated by WordPress and Tumblr; acquired and shut down." },
+    "posterous":      { tier: "fail",    target: "passion", x: "18%",   y: "52%",  label: "Posterous",      f: "Sachin Agarwal",     n: "Loved and well-built blogging tool with no model and a market already dominated by WordPress and Tumblr; acquired and shut down." },
+    "game neverending":{ tier: "meh",    target: "passion", x: "25%",   y: "47%",  label: "Game Neverending", f: "Stewart Butterfield", n: "Craft and passion for social gaming with no viable market; pivoted into Flickr, which did find a need." },
+    "loom":           { tier: "success", target: "passion", x: "21%",   y: "42%",  label: "Loom",           f: "Vinay Hiremath",     n: "Passion for async communication plus video engineering skill; the remote-work shift revealed the latent demand and enabled a model." },
+
+    // ── VOCATION: need + model (no love / skill) ──────────────────────────────
+    "doordash":       { tier: "success", target: "vocation", x: "78%",  y: "45%",  label: "DoorDash",       f: "Tony Xu",            n: "Clear demand and take-rate model from day one; built the logistics skill and density moat that rivals lacked." },
+    "blue apron":     { tier: "fail",    target: "vocation", x: "78%",  y: "50%",  label: "Blue Apron",     f: "Matt Salzberg",      n: "Real meal-kit demand and a subscription model, but no defensible skill or moat; grocery giants cloned it immediately." },
+    "blueapron":      { tier: "fail",    target: "vocation", x: "78%",  y: "50%",  label: "Blue Apron",     f: "Matt Salzberg",      n: "Real meal-kit demand and a subscription model, but no defensible skill or moat; grocery giants cloned it immediately." },
+    "groupon":        { tier: "meh",     target: "vocation", x: "75%",  y: "52%",  label: "Groupon",        f: "Andrew Mason",       n: "Massive early demand and clear take-rate economics, but zero technical moat; cloned globally and margins collapsed." },
+    "living social":  { tier: "fail",    target: "vocation", x: "82%",  y: "48%",  label: "LivingSocial",   f: "Tim O'Shaughnessy",  n: "Rode real daily-deals demand with a functional model, but could not defend the space against Groupon or build skill differentiation." },
+    "livingsocial":   { tier: "fail",    target: "vocation", x: "82%",  y: "48%",  label: "LivingSocial",   f: "Tim O'Shaughnessy",  n: "Rode real daily-deals demand with a functional model, but could not defend the space against Groupon or build skill differentiation." },
+    "honestbee":      { tier: "fail",    target: "vocation", x: "80%",  y: "54%",  label: "Honestbee",      f: "Joel Sng",           n: "Asian grocery delivery with genuine demand and a clear model, but no operational skill to sustain unit economics across markets." },
+
+    // ── PROFESSION: skill + model (no love / need) ────────────────────────────
+    "nvidia":         { tier: "success", target: "profession", x: "45%", y: "78%", label: "NVIDIA",         f: "Jensen Huang",       n: "Deep GPU skill and strong hardware margins for decades; the AI wave created the enormous demand that completed the picture." },
+    "zune":           { tier: "fail",    target: "profession", x: "50%", y: "78%", label: "Microsoft Zune", f: "J Allard",           n: "Competent hardware and a clear price model, but no genuine demand the iPod had not already captured; discontinued in 2011." },
+    "celonis":        { tier: "success", target: "profession", x: "47%", y: "82%", label: "Celonis",        f: "Alexander Rinke",    n: "Deep process-mining engineering skill and a clear enterprise SaaS model; the market for operational efficiency caught up and validated it." },
+    "palantir":       { tier: "success", target: "profession", x: "52%", y: "75%", label: "Palantir",       f: "Peter Thiel",        n: "Formidable data-integration engineering and government contract revenue; the civilian market need took over a decade to materialise." },
+    "wolfram alpha":  { tier: "meh",     target: "profession", x: "48%", y: "85%", label: "Wolfram Alpha",  f: "Stephen Wolfram",    n: "Unparalleled computational knowledge skill and a clear answer-engine model, but limited consumer demand once Google absorbed the use case." },
+    "wolframalpha":   { tier: "meh",     target: "profession", x: "48%", y: "85%", label: "Wolfram Alpha",  f: "Stephen Wolfram",    n: "Unparalleled computational knowledge skill and a clear answer-engine model, but limited consumer demand once Google absorbed the use case." },
+
+    // ── TRI_NOMODEL: love + need + skill, NO monetization ────────────────────
+    "youtube":        { tier: "success", target: "tri_nomodel", x: "34%", y: "34%", label: "YouTube",       f: "Chad Hurley",        n: "Beloved, needed, and well-built; launched with no model, then Google's ad infrastructure provided the missing monetization layer." },
+    "vine":           { tier: "fail",    target: "tri_nomodel", x: "38%", y: "40%", label: "Vine",          f: "Dom Hofmann",        n: "Culturally loved, technically strong, and meeting real short-video demand; Twitter never built a revenue path and shut it down." },
+    "instagram":      { tier: "success", target: "tri_nomodel", x: "35%", y: "38%", label: "Instagram",     f: "Kevin Systrom",      n: "Loved photo product meeting genuine social need with strong mobile craft; no model at acquisition — Facebook supplied the ad engine." },
+    "wikipedia":      { tier: "success", target: "tri_nomodel", x: "40%", y: "34%", label: "Wikipedia",     f: "Jimmy Wales",        n: "Deep community love, universal knowledge need, and strong editorial craft; sustains itself on donations rather than a commercial model." },
+    "soundcloud":     { tier: "meh",     target: "tri_nomodel", x: "37%", y: "42%", label: "SoundCloud",    f: "Alexander Ljung",    n: "Loved by artists and listeners, genuinely needed, strong audio tech; monetization arrived late and remains structurally thin." },
+
+    // ── TRI_NOWIN: love + need + model, NO defensible skill/moat ─────────────
+    "uber":           { tier: "success", target: "tri_nowin",   x: "62%", y: "34%", label: "Uber",          f: "Travis Kalanick",    n: "Passion, demand, and clear take-rate from the start; built the logistics density moat that finally made it defensible." },
+    "lyft":           { tier: "meh",     target: "tri_nowin",   x: "65%", y: "38%", label: "Lyft",          f: "Logan Green",        n: "Real demand and a working model but no moat Uber could not match; remains subscale despite years of competition." },
+    "living spaces":  { tier: "meh",     target: "tri_nowin",   x: "60%", y: "40%", label: "Fab.com",       f: "Jason Goldberg",     n: "Real consumer demand for design goods and a functioning flash-sale model with no skill moat; cloned out of relevance." },
+    "daily harvest":  { tier: "meh",     target: "tri_nowin",   x: "63%", y: "42%", label: "Daily Harvest", f: "Rachel Drori",       n: "Passionate mission, clear subscription model, and real healthy-food demand, but no ingredient sourcing or logistics moat." },
+    "dailyharvest":   { tier: "meh",     target: "tri_nowin",   x: "63%", y: "42%", label: "Daily Harvest", f: "Rachel Drori",       n: "Passionate mission, clear subscription model, and real healthy-food demand, but no ingredient sourcing or logistics moat." },
+    "homejoy":        { tier: "fail",    target: "tri_nowin",   x: "58%", y: "37%", label: "Homejoy",       f: "Adora Cheung",       n: "Real demand for on-demand cleaning, clear model, genuine founder drive — but no skill moat; workers reclassified and the business collapsed." },
+
+    // ── TRI_NOMARKET: love + skill + model, NO real market need ───────────────
+    "slack":          { tier: "success", target: "tri_nomarket", x: "34%", y: "62%", label: "Slack",        f: "Stewart Butterfield", n: "Love, engineering skill, and a freemium model from a failed game; pivoted to messaging where genuine enterprise demand existed." },
+    "juicero":        { tier: "fail",    target: "tri_nomarket", x: "40%", y: "57%", label: "Juicero",      f: "Doug Evans",          n: "Passion, premium engineering, and a subscription model aimed at a problem most people solved with their hands; shut down in 2017." },
+    "google glass":   { tier: "fail",    target: "tri_nomarket", x: "37%", y: "64%", label: "Google Glass", f: "Sergey Brin",         n: "Genuine passion, outstanding engineering, and a premium price point — but consumer demand for heads-up displays did not exist." },
+    "googleglass":    { tier: "fail",    target: "tri_nomarket", x: "37%", y: "64%", label: "Google Glass", f: "Sergey Brin",         n: "Genuine passion, outstanding engineering, and a premium price point — but consumer demand for heads-up displays did not exist." },
+    "quibi":          { tier: "fail",    target: "tri_nomarket", x: "38%", y: "60%", label: "Quibi",        f: "Jeffrey Katzenberg",  n: "Passion for premium mobile content, strong production skill, $1.75B raised — but no evidence anyone wanted 10-minute phone-only shows." },
+    "segway":         { tier: "meh",     target: "tri_nomarket", x: "35%", y: "66%", label: "Segway",       f: "Dean Kamen",          n: "Inventor passion, impressive engineering, and a clear price model; the mass personal-transport need never materialised at scale." },
+
+    // ── TRI_NOCONV: need + skill + model, NO founder conviction ───────────────
+    "azure":          { tier: "success", target: "tri_noconv",  x: "62%", y: "62%", label: "Microsoft Azure", f: "Satya Nadella",    n: "Enterprise need, strong engineering, and a subscription model existed; Nadella's conviction and culture shift converted latent capability into cloud leadership." },
+    "microsoft azure":{ tier: "success", target: "tri_noconv",  x: "62%", y: "62%", label: "Microsoft Azure", f: "Satya Nadella",    n: "Enterprise need, strong engineering, and a subscription model existed; Nadella's conviction and culture shift converted latent capability into cloud leadership." },
+    "google+":        { tier: "fail",    target: "tri_noconv",  x: "57%", y: "57%", label: "Google+",      f: "Vic Gundotra",        n: "Social networking need, Google's engineering might, and a clear path to ads — but built as a strategic reaction, not from belief; shut down 2019." },
+    "googleplus":     { tier: "fail",    target: "tri_noconv",  x: "57%", y: "57%", label: "Google+",      f: "Vic Gundotra",        n: "Social networking need, Google's engineering might, and a clear path to ads — but built as a strategic reaction, not from belief; shut down 2019." },
+    "yahoo":          { tier: "fail",    target: "tri_noconv",  x: "64%", y: "59%", label: "Yahoo",        f: "Marissa Mayer",       n: "Massive audience, strong engineering bench, and search/ad revenue — but leadership never committed a clear conviction on what Yahoo should be." },
+    "ibm watson":     { tier: "meh",     target: "tri_noconv",  x: "60%", y: "65%", label: "IBM Watson",   f: "Ginni Rometty",       n: "Real enterprise AI demand, world-class research depth, and a services model — but no unifying internal conviction on what product to build." },
+    "ibmwatson":      { tier: "meh",     target: "tri_noconv",  x: "60%", y: "65%", label: "IBM Watson",   f: "Ginni Rometty",       n: "Real enterprise AI demand, world-class research depth, and a services model — but no unifying internal conviction on what product to build." },
+    "blackberry":     { tier: "fail",    target: "tri_noconv",  x: "59%", y: "63%", label: "BlackBerry",   f: "Mike Lazaridis",      n: "Enterprise mobile need, strong security engineering, and hardware revenue — but no conviction to cannibalise their keyboard franchise for touchscreens." }
   };
 
-  const body = document.body;
+  // ── four-dimension coverage per region ──────────────────────────────────
+  const DIMS = {
+    love:        { love:1, need:0, skill:0, model:0 },
+    worldneeds:  { love:0, need:1, skill:0, model:0 },
+    goodat:      { love:0, need:0, skill:1, model:0 },
+    paidfor:     { love:0, need:0, skill:0, model:1 },
+    mission:     { love:1, need:1, skill:0, model:0 },
+    passion:     { love:1, need:0, skill:1, model:0 },
+    vocation:    { love:0, need:1, skill:0, model:1 },
+    profession:  { love:0, need:0, skill:1, model:1 },
+    tri_nomodel: { love:1, need:1, skill:1, model:0 },
+    tri_nowin:   { love:1, need:1, skill:0, model:1 },
+    tri_nomarket:{ love:1, need:0, skill:1, model:1 },
+    tri_noconv:  { love:0, need:1, skill:1, model:1 },
+    center:      { love:1, need:1, skill:1, model:1 },
+  };
+
+  // Per-region reasons for each dimension being present or absent
+  const DIM_REASONS = {
+    love:        { has:   { love:"Founder obsession is the core origin story." },
+                   miss:  { need:"Market was assumed, not personally felt.", skill:"Capability was aspired to, not proven.", model:"Revenue was not part of the original vision." } },
+    worldneeds:  { has:   { need:"A clear, large, underserved market demand exists." },
+                   miss:  { love:"Built from opportunity, not founder conviction.", skill:"Execution edge was not the starting point.", model:"Pricing and unit economics came after the idea." } },
+    goodat:      { has:   { skill:"Deep, hard-to-copy technical or domain expertise." },
+                   miss:  { love:"Skill-driven, not passion-driven.", need:"No evidence of real customer demand.", model:"No monetization path attached to the capability." } },
+    paidfor:     { has:   { model:"A working revenue mechanic was the founding insight." },
+                   miss:  { love:"Model-first, not conviction-first.", need:"Demand was assumed to follow the price point.", skill:"No durable edge beyond the pricing mechanic." } },
+    mission:     { has:   { love:"Founders genuinely believe in the mission.", need:"A real, large, underserved need exists." },
+                   miss:  { skill:"Technical capability to deliver was absent or unproven.", model:"No viable path to revenue or unit economics." } },
+    passion:     { has:   { love:"Deep personal love of the problem and craft.", skill:"Strong technical or creative capability." },
+                   miss:  { need:"No evidence of mass market demand.", model:"No pricing or monetization path validated." } },
+    vocation:    { has:   { need:"A large, real, urgent market demand.", model:"A clear take-rate or subscription model." },
+                   miss:  { love:"Opportunity-driven, not passion-driven.", skill:"No defensible moat or hard-to-copy capability." } },
+    profession:  { has:   { skill:"Genuine deep expertise and execution edge.", model:"A working, tested revenue model." },
+                   miss:  { love:"Built without founder conviction or deep care.", need:"Market demand was absent or not yet mature." } },
+    tri_nomodel: { has:   { love:"Founders and users love the product.", need:"Clear, large, real demand.", skill:"Strong technical execution." },
+                   miss:  { model:"No monetization path was established." } },
+    tri_nowin:   { has:   { love:"Genuine founder conviction.", need:"Real market demand validated.", model:"A functioning revenue model." },
+                   miss:  { skill:"No defensible moat — the playbook is copyable." } },
+    tri_nomarket:{ has:   { love:"Passion and conviction are strong.", skill:"Real craft and technical edge.", model:"A viable pricing or revenue model." },
+                   miss:  { need:"No evidence of genuine mass market demand." } },
+    tri_noconv:  { has:   { need:"A real, large market need exists.", skill:"Strong technical and operational capability.", model:"A tested revenue model." },
+                   miss:  { love:"Built strategically, not from founder conviction." } },
+    center:      { has:   { love:"Deep founder conviction.", need:"Large validated market.", skill:"Defensible edge.", model:"Working revenue model." },
+                   miss:  {} },
+  };
+
+  const DIM_META = {
+    love:  { label:"Passion",   name:"Love It",    color:"var(--love)"  },
+    need:  { label:"Market",    name:"Need It",    color:"var(--world)" },
+    skill: { label:"Moat",      name:"Good At It", color:"var(--good)"  },
+    model: { label:"Economics", name:"Pay For It", color:"var(--paid)"  },
+  };
+
+  function renderScorecard(region, companyName) {
+    const sc = document.getElementById('scorecard');
+    if (!region || !DIMS[region]) { sc.style.display='none'; return; }
+    const dims = DIMS[region];
+    const reasons = DIM_REASONS[region] || {};
+    sc.style.display = 'grid';
+    sc.innerHTML = ['love','need','skill','model'].map(d => {
+      const has = !!dims[d];
+      const meta = DIM_META[d];
+      const reason = has ? (reasons.has?.[d] || '') : (reasons.miss?.[d] || '');
+      return `<div class="sc-item ${has ? 'has' : 'missing'}">
+        <div class="sc-icon" style="${has ? `background:color-mix(in srgb,${meta.color} 15%,#1A3028)` : ''}">${has ? '✓' : '✗'}</div>
+        <div class="sc-text">
+          <div class="sc-label">${meta.label}</div>
+          <div class="sc-name">${meta.name}</div>
+          <div class="sc-reason">${reason}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+
   const checkbox = document.getElementById('lensCheckbox');
   const labels = document.querySelectorAll('.lens-label');
 
@@ -1017,6 +1212,7 @@
     els.ppNote.textContent = d.poor.person.note;
     els.pcName.textContent = d.poor.company.name;
     els.pcNote.textContent = d.poor.company.note;
+    renderScorecard(id);
   }
 
   function showIsolatedNodeDetails(companyProfile, dotElement) {
@@ -1028,6 +1224,7 @@
     els.title.textContent = companyProfile.label;
     els.ikigai.textContent = "Framework Quadrant: " + parentMacro.vc;
     els.desc.textContent = companyProfile.n;
+    renderScorecard(companyProfile.target, companyProfile.label);
 
     if (companyProfile.tier === "success") {
       blocks.great.classList.remove('hidden-block');
@@ -1120,6 +1317,7 @@ Respond ONLY with a JSON object, no markdown, no explanation:
     els.title.textContent = result.label;
     els.ikigai.textContent = "Region: " + (parentMacro.vc || result.region);
     els.desc.textContent = result.reasoning;
+    renderScorecard(result.region, result.label);
 
     if (result.tier === 'success') {
       blocks.great.classList.remove('hidden-block');
@@ -1197,17 +1395,47 @@ Respond ONLY with a JSON object, no markdown, no explanation:
         })
       });
 
-      const data = await response.json();
-      if (activeSearchKey !== queryKey) return; // superseded
+      if (!response.ok) {
+        const errBody = await response.json().catch(() => ({}));
+        throw new Error(`API ${response.status}: ${errBody?.error?.message || response.statusText}`);
+      }
 
-      // Extract the final text block (after tool use)
+      let data = await response.json();
+      if (activeSearchKey !== queryKey) return;
+
+      // If model used tools, send results back for a second turn
+      if (data.stop_reason === "tool_use") {
+        const toolResults = data.content
+          .filter(b => b.type === "tool_result" || b.type === "tool_use")
+          .map(b => b.type === "tool_use" ? { type: "tool_result", tool_use_id: b.id, content: b.input?.query || "" } : b);
+        const followUp = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-6",
+            max_tokens: 1000,
+            system: SYSTEM_PROMPT,
+            tools: [{ type: "web_search_20250305", name: "web_search" }],
+            messages: [
+              { role: "user", content: `Research and classify this company in the ikigai VC framework: "${rawQuery}"` },
+              { role: "assistant", content: data.content },
+              { role: "user", content: toolResults }
+            ]
+          })
+        });
+        if (!followUp.ok) throw new Error(`Follow-up API ${followUp.status}`);
+        data = await followUp.json();
+        if (activeSearchKey !== queryKey) return;
+      }
+
+      // Extract the final text block
       const textBlock = data.content.filter(b => b.type === "text").pop();
-      if (!textBlock) throw new Error("No text response");
+      if (!textBlock) throw new Error("No text in response. Raw: " + JSON.stringify(data.content).slice(0,200));
 
       let clean = textBlock.text.replace(/```json|```/g, "").trim();
       // Extract JSON if wrapped in prose
       const jsonMatch = clean.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("No JSON found");
+      if (!jsonMatch) throw new Error("No JSON found in: " + clean.slice(0, 200));
       const result = JSON.parse(jsonMatch[0]);
 
       // Validate region
