@@ -1,1522 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Where Ikigai Meets the Term Sheet</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#0B0F14;
-    --ink-2:#121922;
-    --ink-3:#1A2330;
-    --paper:#F1EAD9;
-    --paper-dim:#DCD3BC;
-    --gold:#D4AF37;
-    --gold-dim:#8C7526;
-    --rust:#9A4A3A;
-    --love:#5E76E0;
-    --world:#2FB3A3;
-    --good:#D1568C;
-    --paid:#E0AE3F;
-    --ink-text:#EDE7D8;
-    --ink-text-dim:#9BA3AE;
-    
-    /* Performance Color Tiers */
-    --tier-success: #6FBF9A;
-    --tier-meh: #D4AF37;
-    --tier-fail: #C77B6B;
-  }
-
-  *{ box-sizing:border-box; }
-  html,body{ margin:0; padding:0; }
-  body{
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, #182231 0%, transparent 60%),
-      var(--ink);
-    color:var(--ink-text);
-    font-family:'Inter', sans-serif;
-    min-height:100vh;
-    overflow-x:hidden;
-  }
-
-  ::selection{ background:var(--gold); color:var(--ink); }
-
-  /* ---------- layout shell ---------- */
-  .wrap{
-    max-width:1440px;
-    margin:0 auto;
-    padding:64px 28px 100px;
-  }
-
-  header.hero{
-    text-align:center;
-    max-width:680px;
-    margin:0 auto 40px;
-  }
-
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:0.28em;
-    text-transform:uppercase;
-    color:var(--gold);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:18px;
-  }
-  .eyebrow::before, .eyebrow::after{
-    content:"";
-    width:26px; height:1px;
-    background:var(--gold-dim);
-  }
-
-  h1{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:clamp(32px, 5vw, 52px);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    margin:0 0 18px;
-  }
-  h1 em{
-    font-style:italic;
-    font-weight:500;
-    color:var(--gold);
-  }
-
-  .sub{
-    font-size:15.5px;
-    line-height:1.6;
-    color:var(--ink-text-dim);
-    margin:0 auto 24px;
-    max-width:520px;
-  }
-
-  /* ---------- search bar UI element ---------- */
-  .search-container {
-    max-width: 480px;
-    margin: 0 auto 32px;
-    position: relative;
-    display: flex;
-    gap: 10px;
-  }
-  .search-input {
-    flex: 1;
-    background: var(--ink-3);
-    border: 1px solid #2A3543;
-    border-radius: 999px;
-    padding: 12px 24px;
-    color: var(--paper);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.25s, box-shadow 0.25s;
-  }
-  .search-input:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
-  }
-  .search-button {
-    background: var(--gold);
-    color: var(--ink);
-    border: none;
-    border-radius: 999px;
-    padding: 0 24px;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
-  }
-  .search-button:hover {
-    background: #E5C158;
-    transform: translateY(-1px);
-  }
-  .search-button:active {
-    transform: translateY(0);
-  }
-  .toast-notification {
-    position: fixed;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #231215;
-    border: 1px solid var(--tier-fail);
-    color: #F8D2D4;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    padding: 12px 24px;
-    border-radius: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
-    z-index: 100;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  }
-  .toast-notification.visible {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-
-  /* ---------- lens toggle ---------- */
-  .lens-control{
-    display:inline-flex;
-    align-items:center;
-    gap:14px;
-    padding:8px 8px 8px 18px;
-    border:1px solid #2A3543;
-    border-radius:999px;
-    background:var(--ink-2);
-    margin-bottom:12px;
-  }
-  .lens-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:0.08em;
-    color:var(--ink-text-dim);
-    transition:color .35s ease;
-    text-transform:uppercase;
-  }
-  .lens-label.active{ color:var(--paper); }
-  .lens-label.vc.active{ color:var(--gold); }
-
-  .switch{
-    position:relative;
-    width:46px; height:26px;
-    background:#232E3B;
-    border-radius:999px;
-    border:1px solid #34404F;
-    cursor:pointer;
-    flex-shrink:0;
-  }
-  .switch .knob{
-    position:absolute;
-    top:2px; left:2px;
-    width:20px; height:20px;
-    border-radius:50%;
-    background:var(--paper);
-    transition:transform .38s cubic-bezier(.65,0,.35,1), background .38s ease;
-  }
-  body.lens-vc .switch .knob{
-    transform:translateX(20px);
-    background:var(--gold);
-  }
-  .switch input{
-    position:absolute; inset:0; opacity:0; margin:0; cursor:pointer;
-  }
-
-  /* ---------- side-by-side core layout ---------- */
-  .workspace {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  @media (min-width: 1024px) {
-    .workspace {
-      flex-direction: row;
-      align-items: flex-start;
-    }
-    .stage-wrapper {
-      flex: 1;
-      min-width: 0;
-    }
-  }
-
-  /* ---------- diagram card ---------- */
-  .stage{
-    position:relative;
-    background:radial-gradient(ellipse 700px 500px at 50% 20%, #17202C 0%, #0D131A 70%);
-    border-radius:20px;
-    padding:36px;
-    box-shadow:0 30px 80px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.04);
-    border:1px solid #232E3B;
-  }
-
-  .diagram-frame{
-    position:relative;
-    width:100%;
-    max-width:620px;
-    aspect-ratio:1/1;
-    margin:0 auto;
-  }
-
-  /* ---------- 45-Degree Clockwise Rotation Rig ---------- */
-  .rotation-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform: rotate(45deg);
-    transform-origin: center center;
-  }
-
-  .diagram-frame svg{
-    width:100%; height:100%; display:block;
-    filter:drop-shadow(0 4px 18px rgba(0,0,0,.5));
-  }
-
-  circle.venn{
-    mix-blend-mode:screen;
-    transition:opacity .5s ease;
-  }
-
-  /* ---------- intersection highlight ---------- */
-  .region{
-    fill:var(--gold);
-    fill-opacity:0;
-    stroke:var(--gold);
-    stroke-width:0;
-    stroke-opacity:0;
-    stroke-linejoin:round;
-    pointer-events:none;
-    transition:fill-opacity .32s ease, stroke-opacity .32s ease, stroke-width .32s ease;
-  }
-  .region.active{
-    fill-opacity:.15;
-    stroke-width:2.5;
-    stroke-opacity:.95;
-    filter:drop-shadow(0 0 9px rgba(212,175,55,.55));
-  }
-
-  /* ---------- hotspots ---------- */
-  .hotspot{
-    position:absolute;
-    border-radius:50%;
-    border:none;
-    background:transparent;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:0;
-    -webkit-tap-highlight-color:transparent;
-    z-index:3;
-    /* Counter-rotate text label layers to keep them cleanly upright */
-    transform: rotate(-45deg);
-  }
-  .hotspot:hover .label-inner,
-  .hotspot:focus-visible .label-inner{
-    transform:scale(1.06);
-  }
-  .hotspot:focus-visible{
-    outline:2px solid var(--gold);
-    outline-offset:3px;
-  }
-  .hotspot .ring{
-    position:absolute; inset:-6px;
-    border-radius:50%;
-    border:1.5px solid transparent;
-    transition:border-color .3s ease, transform .3s ease;
-  }
-  .hotspot:hover .ring, .hotspot:focus-visible .ring{
-    border-color:transparent;
-  }
-
-  .label-inner{
-    position:relative;
-    text-align:center;
-    transition:transform .3s ease;
-    pointer-events:none;
-  }
-
-  .term-stack{ position:relative; display:block; }
-  .term{
-    display:block;
-    transition:opacity .55s ease, transform .55s ease;
-  }
-  .term-ikigai{
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-weight:500;
-    color:#F4EFE2;
-    text-shadow:0 1px 6px rgba(0,0,0,.7);
-    opacity:1;
-    transform:translateY(0);
-  }
-  .term-vc{
-    position:absolute;
-    top:0; left:50%;
-    transform:translate(-50%, 6px);
-    white-space:nowrap;
-    font-family:'IBM Plex Mono', monospace;
-    font-weight:500;
-    letter-spacing:.03em;
-    color:var(--gold);
-    text-shadow:0 1px 6px rgba(0,0,0,.7);
-    opacity:0;
-  }
-  body.lens-vc .term-ikigai{ opacity:0; transform:translateY(-6px); }
-  body.lens-vc .term-vc{ opacity:1; transform:translate(-50%, 0); }
-
-  .hs-center .term-ikigai, .hs-center .term-vc{ font-size:16px; }
-  .hs-overlap .term-ikigai{ font-size:13.5px; }
-  .hs-overlap .term-vc{ font-size:10.5px; }
-  .hs-outer .term-ikigai{ font-size:13.5px; }
-  .hs-outer .term-vc{ font-size:10px; }
-
-  .hs-center{ z-index:5; }
-  .hs-overlap{ z-index:4; }
-  .hs-outer{ z-index:3; }
-  .hs-triple{ z-index:6; }
-  .hs-triple .term-ikigai{ font-size:10px; font-style:italic; }
-  .hs-triple .term-vc{ font-size:8px; letter-spacing:.02em; }
-
-  /* ---------- color coded element markers ---------- */
-  .example-dot {
-    position: absolute;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 20; 
-    border: 1.5px solid var(--ink);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-  }
-  .example-dot.success {
-    background-color: var(--tier-success);
-    box-shadow: 0 0 6px rgba(111, 191, 154, 0.6);
-  }
-  .example-dot.meh {
-    background-color: var(--tier-meh);
-    box-shadow: 0 0 6px rgba(214, 175, 55, 0.6);
-  }
-  .example-dot.fail {
-    background-color: var(--tier-fail);
-    box-shadow: 0 0 6px rgba(199, 123, 107, 0.6);
-  }
-  .example-dot:hover {
-    transform: scale(1.6) rotate(-45deg);
-    box-shadow: 0 0 12px currentColor;
-  }
-  .example-dot.active {
-    transform: scale(1.5) rotate(-45deg);
-    border-color: #FFF;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
-  }
-
-  /* ---------- footnote ---------- */
-  .stage-note{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:#5C6673;
-    text-align:center;
-    margin-top:22px;
-  }
-
-  .legend{
-    display:flex;
-    justify-content:center;
-    gap:22px;
-    flex-wrap:wrap;
-    margin-top:26px;
-  }
-  .legend .item{
-    display:flex; align-items:center; gap:7px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:.04em;
-    color:var(--ink-text-dim);
-  }
-  .legend .swatch{ width:9px; height:9px; border-radius:50%; }
-
-  /* ---------- persistent panel ---------- */
-  .panel{
-    background:var(--ink-2);
-    border:1px solid #2A3543;
-    overflow-y:auto;
-    padding:30px 26px 40px;
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  @media (min-width: 1024px) {
-    .panel {
-      position: sticky;
-      top: 40px;
-      width: 440px;
-      max-height: calc(100vh - 80px);
-      flex-shrink: 0;
-    }
-  }
-
-  .panel-close{ display: none; }
-
-  .panel-tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--gold);
-    margin-bottom:10px;
-  }
-  .panel h2{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:27px;
-    margin:0 0 6px;
-    line-height:1.15;
-  }
-  .panel .ikigai-name{
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-size:14.5px;
-    color:var(--ink-text-dim);
-    margin:0 0 16px;
-  }
-  .panel .desc{
-    font-size:14px;
-    line-height:1.65;
-    color:#C7CCD3;
-    margin:0 0 30px;
-    padding-bottom:24px;
-    border-bottom:1px solid #232E3B;
-  }
-
-  .verdict-block{ margin-bottom:26px; }
-  .verdict-head{
-    display:flex; align-items:center; gap:9px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    margin-bottom:13px;
-  }
-  .verdict-head.great{ color:#6FBF9A; }
-  .verdict-head.poor{ color:#C77B6B; }
-  .dot{ width:7px; height:7px; border-radius:50%; }
-  .dot.great{ background:#6FBF9A; }
-  .dot.poor{ background:#C77B6B; }
-
-  .card{
-    background:var(--ink-3);
-    border:1px solid #29333F;
-    border-radius:12px;
-    padding:15px 16px;
-    margin-bottom:10px;
-  }
-  .card .who{
-    display:flex; align-items:baseline; justify-content:space-between;
-    gap:10px;
-    margin-bottom:5px;
-  }
-  .card .who-name{
-    font-weight:600;
-    font-size:14px;
-    color:var(--paper);
-  }
-  .card .who-role{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:9.5px;
-    letter-spacing:.05em;
-    text-transform:uppercase;
-    color:var(--ink-text-dim);
-    flex-shrink:0;
-  }
-  .card .note{
-    font-size:12.8px;
-    line-height:1.55;
-    color:#AEB5BF;
-  }
-
-  .scorecard {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin: 0 0 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid #232E3B;
-  }
-  .sc-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-    background: var(--ink-3);
-    border: 1px solid #29333F;
-    border-radius: 10px;
-    padding: 10px 12px;
-    transition: border-color .2s;
-  }
-  .sc-item.has  { border-color: #2A4A3A; }
-  .sc-item.missing { border-color: #3A2A28; opacity: .72; }
-  .sc-icon {
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700;
-  }
-  .sc-item.has .sc-icon   { background: #1A3028; color: #6FBF9A; }
-  .sc-item.missing .sc-icon { background: #2A1A18; color: #C77B6B; }
-  .sc-text { flex: 1; min-width: 0; }
-  .sc-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink-text-dim);
-    margin-bottom: 3px;
-  }
-  .sc-name {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: var(--paper);
-    margin-bottom: 3px;
-  }
-  .sc-reason {
-    font-size: 11px;
-    line-height: 1.45;
-    color: #7A8390;
-  }
-  .sc-item.has .sc-reason  { color: #8EB5A0; }
-  .sc-item.missing .sc-reason { color: #9A6A62; }
-
-
-
-  @keyframes dot-enter {
-    0%   { transform: scale(0) rotate(-45deg); opacity: 0; }
-    60%  { transform: scale(1.9) rotate(-45deg); opacity: 1; }
-    80%  { transform: scale(0.85) rotate(-45deg); }
-    100% { transform: scale(1) rotate(-45deg); opacity: 1; }
-  }
-  @keyframes dot-ping {
-    0%   { box-shadow: 0 0 0 0px currentColor; opacity: 0.9; }
-    100% { box-shadow: 0 0 0 14px transparent; opacity: 0; }
-  }
-  .example-dot.new-dot {
-    animation: dot-enter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  }
-  .example-dot.new-dot::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 50%;
-    animation: dot-ping 1s ease-out 0.4s 3;
-  }
-
-
-    .wrap{ padding:44px 16px 70px; }
-    .stage{ padding:20px; }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI, Fintech & Deep Tech — CBS Summer 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--c-bg:#0b0f14;--c-surface:#141a22;--c-white:#e8eaed;--c-muted:#8b95a5;--c-dim:#4a5568;--c-border:#2a3342;--c-teal:#5DCAA5;--c-amber:#EF9F27;--c-coral:#F0997B;--c-blue:#85B7EB;--c-purple:#AFA9EC;--font:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace}
+    body{background:linear-gradient(135deg,var(--c-bg) 0%,#0a0d12 100%);color:var(--c-white);font-family:var(--font);min-height:100vh}
+    .hero{position:relative;padding:80px 40px;text-align:center;overflow:hidden}
+    .hero-background{position:absolute;top:0;left:0;right:0;bottom:0;opacity:0.15;pointer-events:none}
+    .hero-background canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+    .hero-content{position:relative;z-index:2;max-width:900px;margin:0 auto}
+    .hero h1{font-size:3.2em;line-height:1.1;margin-bottom:12px;font-weight:700;letter-spacing:-0.02em}
+    .hero .tagline{font-size:1.1em;color:var(--c-muted);margin-bottom:24px}
+    .hero .divider-line{width:80px;height:3px;background:var(--c-teal);margin:24px auto}
+    .hero .meta{font-family:var(--mono);font-size:0.85em;color:var(--c-dim);margin-bottom:8px}
+    .nav{background:rgba(20,26,34,0.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border);position:sticky;top:0;z-index:100}
+    .nav-content{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:16px 40px}
+    .nav-logo{font-family:var(--mono);font-weight:700;font-size:0.9em;text-transform:uppercase;letter-spacing:0.1em;color:var(--c-teal)}
+    .nav-scroll{display:flex;gap:32px}
+    .nav-link{font-size:0.85em;color:var(--c-muted);text-decoration:none;transition:color 0.3s;white-space:nowrap}
+    .nav-link:hover,.nav-link.active{color:var(--c-teal)}
+    .container{max-width:1400px;margin:0 auto;padding:60px 40px}
+    .week{margin-bottom:80px;scroll-margin-top:80px}
+    .week-header{display:flex;align-items:baseline;gap:20px;margin-bottom:8px}
+    .week-subtitle{font-size:0.95em;color:var(--c-muted);margin-bottom:32px}
+    .week-badge{font-family:var(--mono);font-size:0.75em;background:var(--c-teal);color:var(--c-bg);padding:6px 14px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+    .week-badge.w2{background:var(--c-blue)}.week-badge.w3{background:var(--c-amber)}
+    .week-title{font-size:2em;font-weight:600}
+    .session-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:32px}
+    .session-card{background:var(--c-surface);border:1.5px solid var(--c-border);border-radius:16px;padding:28px 32px;text-decoration:none;color:var(--c-white);transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden;display:flex;flex-direction:column}
+    .session-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+    .session-card.s1::before{background:var(--c-teal)}.session-card.s3::before{background:var(--c-amber)}.session-card.s4::before{background:var(--c-coral)}.session-card.s5::before{background:var(--c-coral)}.session-card.s6::before{background:var(--c-purple)}.session-card.w2::before{background:var(--c-amber)}.session-card.w2v::before{background:var(--c-teal)}.session-card.exam::before{background:var(--c-coral)}.session-card.practice::before{background:var(--c-teal)}.session-card.glossary::before{background:var(--c-teal)}.session-card.concepts::before{background:var(--c-amber)}.session-card.w3::before{background:var(--c-purple)}
+    .session-card:not(.placeholder):hover{border-color:var(--c-teal);transform:translateY(-8px);box-shadow:0 20px 40px rgba(93,202,165,0.15)}
+    .session-card:not(.placeholder):hover::before{transform:scaleX(1)}
+    .session-label{font-family:var(--mono);font-size:0.65em;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+    .session-title{font-size:1.35em;font-weight:700;margin-bottom:12px;line-height:1.3}
+    .session-description{font-size:0.88em;color:var(--c-muted);margin-bottom:20px;flex-grow:1;line-height:1.5}
+    .session-meta{font-family:var(--mono);font-size:0.78em;color:var(--c-dim);display:flex;justify-content:space-between;align-items:center}
+    .session-arrow{font-size:1.2em;transition:transform 0.3s}
+    .session-card:not(.placeholder):hover .session-arrow{transform:translateX(4px)}
+    .tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+    .tag{font-family:var(--mono);font-size:0.62em;padding:3px 8px;border-radius:6px;border:1px solid}
+    .tag-teal{color:var(--c-teal);border-color:rgba(93,202,165,0.3);background:rgba(93,202,165,0.07)}
+    .tag-blue{color:var(--c-blue);border-color:rgba(133,183,235,0.3);background:rgba(133,183,235,0.07)}
+    .tag-amber{color:var(--c-amber);border-color:rgba(239,159,39,0.3);background:rgba(239,159,39,0.07)}
+    .tag-coral{color:var(--c-coral);border-color:rgba(240,153,123,0.3);background:rgba(240,153,123,0.07)}
+    .tag-purple{color:var(--c-purple);border-color:rgba(175,169,236,0.3);background:rgba(175,169,236,0.07)}
+    .session-card.placeholder{background:rgba(139,149,165,0.05);border-color:rgba(42,51,66,0.6);color:var(--c-dim);cursor:not-allowed;pointer-events:none}
+    .session-card.placeholder .session-title{color:var(--c-dim)}
+    .session-card.placeholder .session-description{color:rgba(139,149,165,0.4)}
+    .placeholder-badge{display:inline-block;font-family:var(--mono);font-size:0.62em;background:rgba(139,149,165,0.1);color:var(--c-dim);padding:4px 10px;border-radius:10px;margin-top:8px;text-transform:uppercase;letter-spacing:0.06em}
+    .footer{border-top:1px solid var(--c-border);padding:40px;text-align:center;color:var(--c-dim);font-size:0.9em;margin-top:80px}
+    @media(max-width:768px){.hero{padding:60px 24px}.hero h1{font-size:2.2em}.container{padding:40px 24px}.session-grid{grid-template-columns:1fr}.week-header{flex-direction:column;gap:12px}}
+  </style>
 </head>
 <body>
-
-<div class="wrap">
-
-  <header class="hero">
-    <div class="eyebrow">Framework</div>
-    <h1>Where <em>Ikigai</em> Meets the Term Sheet</h1>
-    <p class="sub">Map any company into its diligence coordinates. Search below.</p>
-
-    <!-- Search Engine Interface Element Container -->
-    <div class="search-container">
-      <input type="text" id="frameworkSearchInput" class="search-input" placeholder="Type company name (e.g. Canva, Figma, Juicero, Tesla)..." aria-label="Search companies to place in framework">
-      <button id="frameworkSearchBtn" class="search-button">Search</button>
-    </div>
-
-    <div class="lens-control">
-      <span class="lens-label ikigai active" data-lens-label="ikigai">Ikigai</span>
-      <div class="switch" id="lensSwitch">
-        <input type="checkbox" id="lensCheckbox" aria-label="Toggle between ikigai and VC/PE lens">
-        <div class="knob"></div>
-      </div>
-      <span class="lens-label vc" data-lens-label="vc">Deal Lens</span>
-    </div>
-  </header>
-
-  <div class="workspace">
-    
-    <div class="stage-wrapper">
-      <div class="stage">
-        <div class="diagram-frame" id="diagramFrame">
-          
-          <!-- Master Rotation Grid -->
-          <div class="rotation-wrapper">
-            <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-              <circle class="venn" cx="230" cy="230" r="190" fill="var(--love)" fill-opacity="0.5"></circle>
-              <circle class="venn" cx="370" cy="230" r="190" fill="var(--world)" fill-opacity="0.5"></circle>
-              <circle class="venn" cx="230" cy="370" r="190" fill="var(--good)" fill-opacity="0.5"></circle>
-              <circle class="venn" cx="370" cy="370" r="190" fill="var(--paid)" fill-opacity="0.5"></circle>
-              <g class="regions">
-              <path class="region region-love" d="M 53.37 300.00 A 190 190 0 0 1 185.33 185.33 A 190 190 0 0 1 300.00 53.37 A 190 190 0 0 0 53.37 300.00 Z"></path>
-              <path class="region region-worldneeds" d="M 300.00 53.37 A 190 190 0 0 1 414.67 185.33 A 190 190 0 0 1 546.63 300.00 A 190 190 0 0 0 300.00 53.37 Z"></path>
-              <path class="region region-goodat" d="M 53.37 300.00 A 190 190 0 0 0 300.00 546.63 A 190 190 0 0 1 185.33 414.67 A 190 190 0 0 1 53.37 300.00 Z"></path>
-              <path class="region region-paidfor" d="M 546.63 300.00 A 190 190 0 0 1 414.67 414.67 A 190 190 0 0 1 300.00 546.63 A 190 190 0 0 0 546.63 300.00 Z"></path>
-              <path class="region region-mission" d="M 300.00 53.37 A 190 190 0 0 0 185.33 185.33 A 190 190 0 0 1 300.00 193.37 A 190 190 0 0 1 414.67 185.33 A 190 190 0 0 0 300.00 53.37 Z"></path>
-              <path class="region region-passion" d="M 185.33 414.67 A 190 190 0 0 1 193.37 300.00 A 190 190 0 0 1 185.33 185.33 A 190 190 0 0 0 53.37 300.00 A 190 190 0 0 0 185.33 414.67 Z"></path>
-              <path class="region region-vocation" d="M 546.63 300.00 A 190 190 0 0 0 414.67 185.33 A 190 190 0 0 1 406.63 300.00 A 190 190 0 0 1 414.67 414.67 A 190 190 0 0 0 546.63 300.00 Z"></path>
-              <path class="region region-profession" d="M 185.33 414.67 A 190 190 0 0 0 300.00 546.63 A 190 190 0 0 0 414.67 414.67 A 190 190 0 0 1 300.00 406.63 A 190 190 0 0 1 185.33 414.67 Z"></path>
-              <path class="region region-tri_nomodel" d="M 193.37 300.00 A 190 190 0 0 1 300.00 193.37 A 190 190 0 0 0 185.33 185.33 A 190 190 0 0 0 193.37 300.00 Z"></path>
-              <path class="region region-tri_nowin" d="M 414.67 185.33 A 190 190 0 0 0 300.00 193.37 A 190 190 0 0 1 406.63 300.00 A 190 190 0 0 0 414.67 185.33 Z"></path>
-              <path class="region region-tri_nomarket" d="M 300.00 406.63 A 190 190 0 0 1 193.37 300.00 A 190 190 0 0 0 185.33 414.67 A 190 190 0 0 0 300.00 406.63 Z"></path>
-              <path class="region region-tri_noconv" d="M 414.67 414.67 A 190 190 0 0 0 406.63 300.00 A 190 190 0 0 1 300.00 406.63 A 190 190 0 0 0 414.67 414.67 Z"></path>
-              <path class="region region-center" d="M 300.00 406.63 A 190 190 0 0 0 406.63 300.00 A 190 190 0 0 0 300.00 193.37 A 190 190 0 0 0 193.37 300.00 A 190 190 0 0 0 300.00 406.63 Z"></path>
-              </g>
-            </svg>
-
-            <!-- outer hotspots -->
-            <button class="hotspot hs-outer" data-id="love" style="left:8.3%; top:8.3%; width:22%; height:22%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">What You<br>Love</span>
-                <span class="term term-vc">FOUNDER<br>PASSION</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-outer" data-id="worldneeds" style="left:69.7%; top:8.3%; width:22%; height:22%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">What The<br>World Needs</span>
-                <span class="term term-vc">MARKET<br>NEED</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-outer" data-id="goodat" style="left:8.3%; top:69.7%; width:22%; height:22%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">What You're<br>Good At</span>
-                <span class="term term-vc">RIGHT TO<br>WIN</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-outer" data-id="paidfor" style="left:69.7%; top:69.7%; width:22%; height:22%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">What You Can<br>Be Paid For</span>
-                <span class="term term-vc">MONETI&#8209;<br>ZATION</span>
-              </span></span>
-            </button>
-
-            <!-- overlap hotspots -->
-            <button class="hotspot hs-overlap" data-id="mission" style="left:28.3%; top:10%; width:43.3%; height:38.3%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Mission</span>
-                <span class="term term-vc">FOUNDER&#8209;<br>MARKET</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-overlap" data-id="passion" style="left:10%; top:28.3%; width:38.3%; height:43.3%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Passion</span>
-                <span class="term term-vc">FOUNDER&#8209;<br>MARKET FIT</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-overlap" data-id="vocation" style="left:51.7%; top:28.3%; width:38.3%; height:43.3%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Vocation</span>
-                <span class="term term-vc">SCALABLE<br>TIMING</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-overlap" data-id="profession" style="left:28.3%; top:51.7%; width:43.3%; height:38.3%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Profession</span>
-                <span class="term term-vc">DEFENSIBLE<br>MODEL</span>
-              </span></span>
-            </button>
-
-            <!-- triple hotspots -->
-            <button class="hotspot hs-triple" data-id="tri_nomodel" style="left:30.7%; top:30.7%; width:12%; height:12%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">No<br>Wealth</span>
-                <span class="term term-vc">NO<br>MODEL</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-triple" data-id="tri_nowin" style="left:57.3%; top:30.7%; width:12%; height:12%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Uncer&#8209;<br>tainty</span>
-                <span class="term term-vc">NO<br>MOAT</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-triple" data-id="tri_nomarket" style="left:30.7%; top:57.3%; width:12%; height:12%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Useless&#8209;<br>ness</span>
-                <span class="term term-vc">NO<br>MARKET</span>
-              </span></span>
-            </button>
-
-            <button class="hotspot hs-triple" data-id="tri_noconv" style="left:57.3%; top:57.3%; width:12%; height:12%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Empti&#8209;<br>ness</span>
-                <span class="term term-vc">NO<br>CONVICTION</span>
-              </span></span>
-            </button>
-
-            <!-- center hotspot -->
-            <button class="hotspot hs-center" data-id="center" style="left:38.3%; top:38.3%; width:23.3%; height:23.3%;">
-              <span class="ring"></span>
-              <span class="label-inner"><span class="term-stack">
-                <span class="term term-ikigai">Ikigai</span>
-                <span class="term term-vc">THE&nbsp;FUND&#8209;<br>ABLE DEAL</span>
-              </span></span>
-            </button>
-
-            <!-- 0-Degree Outer Core Intersections -->
-            <div class="example-dot success" data-ex="spanx" style="left: 14%; top: 14%;"></div>
-            <div class="example-dot fail" data-ex="quirky" style="left: 20%; top: 20%;"></div>
-            <div class="example-dot success" data-ex="warbyparker" style="left: 82%; top: 14%;"></div>
-            <div class="example-dot fail" data-ex="petscom" style="left: 76%; top: 20%;"></div>
-            <div class="example-dot success" data-ex="deepmind" style="left: 14%; top: 82%;"></div>
-            <div class="example-dot fail" data-ex="magicleap" style="left: 20%; top: 76%;"></div>
-            <div class="example-dot success" data-ex="priceline" style="left: 82%; top: 82%;"></div>
-            <div class="example-dot fail" data-ex="moviepass" style="left: 76%; top: 76%;"></div>
-
-            <!-- 1-Degree Mid Overlap Intersections -->
-            <div class="example-dot success" data-ex="duolingo" style="left: 47%; top: 22%;"></div>
-            <div class="example-dot fail" data-ex="betterplace" style="left: 51.5%; top: 22%;"></div>
-            <div class="example-dot success" data-ex="figma" style="left: 22%; top: 47%;"></div>
-            <div class="example-dot fail" data-ex="path" style="left: 22%; top: 51.5%;"></div>
-            <div class="example-dot success" data-ex="doordash" style="left: 76.5%; top: 47%;"></div>
-            <div class="example-dot fail" data-ex="blueapron" style="left: 76.5%; top: 51.5%;"></div>
-            <div class="example-dot success" data-ex="nvidia" style="left: 47%; top: 76.5%;"></div>
-            <div class="example-dot fail" data-ex="zune" style="left: 51.5%; top: 76.5%;"></div>
-
-            <!-- 3 & 4-Degree Core Cluster Intersections -->
-            <div class="example-dot success" data-ex="canva" style="left: 45.5%; top: 43.5%;"></div>
-            <div class="example-dot fail" data-ex="wework" style="left: 53.5%; top: 53.5%;"></div>
-            <div class="example-dot success" data-ex="youtube" style="left: 36.5%; top: 35.5%;"></div>
-            <div class="example-dot fail" data-ex="vine" style="left: 38.5%; top: 41.5%;"></div>
-            <div class="example-dot success" data-ex="uber" style="left: 60.5%; top: 35.5%;"></div>
-            <div class="example-dot meh" data-ex="groupon" style="left: 58.5%; top: 41.5%;"></div>
-            <div class="example-dot success" data-ex="slack" style="left: 36.5%; top: 60.5%;"></div>
-            <div class="example-dot fail" data-ex="juicero" style="left: 38.5%; top: 54.5%;"></div>
-            <div class="example-dot success" data-ex="azure" style="left: 60.5%; top: 60.5%;"></div>
-            <div class="example-dot fail" data-ex="googleplus" style="left: 58.5%; top: 54.5%;"></div>
-
-            <!-- Container for user dynamically queried search circles -->
-            <div id="dynamicDotsContainer"></div>
-
-          </div>
-
-        </div>
-
-        <div class="legend">
-          <div class="item"><span class="swatch" style="background:var(--love)"></span>Love / Team</div>
-          <div class="item"><span class="swatch" style="background:var(--world)"></span>World Needs / Market</div>
-          <div class="item"><span class="swatch" style="background:var(--good)"></span>Good At / Moat</div>
-          <div class="item"><span class="swatch" style="background:var(--paid)"></span>Paid For / Economics</div>
-        </div>
-
-        <div class="legend" style="margin-top: 12px; border-top: 1px solid #1A2330; padding-top: 12px;">
-          <div class="item"><span class="swatch" style="background:var(--tier-success)"></span>Success Vector</div>
-          <div class="item"><span class="swatch" style="background:var(--tier-meh)"></span>Meh / Pivot Needed</div>
-          <div class="item"><span class="swatch" style="background:var(--tier-fail)"></span>Structural Failure</div>
-        </div>
-
-        <p class="stage-note">Type enterprise assets above to automatically pin circles on the framework map</p>
-      </div>
-    </div>
-
-    <!-- Always Visible Details Sidebar Panel -->
-    <aside class="panel" id="panel">
-      <div class="panel-tag" id="panelTag">Diligence Framework</div>
-      <h2 id="panelTitle">Ecosystem Index</h2>
-      <p class="ikigai-name" id="panelIkigai">Interactive Investment Mapping</p>
-      <p class="desc" id="panelDesc">Submit an entry in the search pipeline above. Valid targets generate customized coordinate vector circle layers to audit tactical alignment gaps.</p>
-
-      <!-- Four-dimension coverage scorecard -->
-      <div class="scorecard" id="scorecard" style="display:none"></div>
-
-      <div class="verdict-block" id="blockGreat">
-        <div class="verdict-head great"><span class="dot great"></span>Got It Right</div>
-        <div class="card">
-          <div class="who"><span class="who-name" id="greatPersonName">Melanie Perkins</span><span class="who-role">Founder</span></div>
-          <div class="note" id="greatPersonNote">Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled.</div>
-        </div>
-        <div class="card">
-          <div class="who"><span class="who-name" id="greatCoName">Canva</span><span class="who-role">Company</span></div>
-          <div class="note" id="greatCoNote">All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions.</div>
-        </div>
-      </div>
-
-      <div class="verdict-block" id="blockPoor">
-        <div class="verdict-head poor"><span class="dot poor"></span>Missed It</div>
-        <div class="card">
-          <div class="who"><span class="who-name" id="poorPersonName">Adam Neumann</span><span class="who-role">Founder</span></div>
-          <div class="note" id="poorPersonNote">Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics.</div>
-        </div>
-        <div class="card">
-          <div class="who"><span class="who-name" id="poorCoName">WeWork</span><span class="who-role">Company</span></div>
-          <div class="note" id="poorCoNote">Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics.</div>
-        </div>
-      </div>
-    </aside>
-
+<div class="hero-background"><canvas id="hero-canvas"></canvas></div>
+<section class="hero">
+  <div class="hero-content">
+    <h1>AI, Fintech &amp; Deep Tech</h1>
+    <p class="tagline">in Finance and Business</p>
+    <div class="divider-line"></div>
+    <div class="meta">BA-BHAAI1115U &middot; 7.5 ECTS &middot; Summer 2026</div>
+    <div class="meta">Copenhagen Business School</div>
   </div>
+</section>
+<nav class="nav"><div class="nav-content"><div class="nav-logo">CBS Course</div><div class="nav-scroll"><a href="#week-1" class="nav-link active">Week 1</a><a href="#week-2" class="nav-link">Week 2</a><a href="#week-3" class="nav-link">Week 3</a></div></div></nav>
+<div class="container">
+
+  <section class="week" id="week-1">
+    <div class="week-header"><span class="week-badge">Week 1</span><h2 class="week-title">Foundations &amp; Core Concepts</h2></div>
+    <p class="week-subtitle">How AI learns, what it does, how to govern it, and what is coming next</p>
+    <div class="session-grid">
+
+      <a href="CBS_W1_Day1.html" class="session-card s1">
+        <div class="session-label">Sessions 1 &amp; 2 &middot; Day 1</div>
+        <h3 class="session-title">How AI Learns &amp; What AI Does</h3>
+        <p class="session-description">ML fundamentals, neural networks, data pipelines, precision vs recall, NLP, generative AI, agentic systems, and the RAG decision.</p>
+        <div class="tag-row"><span class="tag tag-teal">ML Foundations</span><span class="tag tag-blue">NLP &middot; GenAI &middot; Agentic</span><span class="tag tag-teal">Interactive</span></div>
+        <div class="session-meta"><span>76 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+
+      <a href="CBS_W1_S3_Data_Governance.html" class="session-card s3">
+        <div class="session-label">Session 3 &middot; Day 2</div>
+        <h3 class="session-title">Data Governance</h3>
+        <p class="session-description">Data ownership, lineage, quality gates, GDPR, EU AI Act, and why governance is the difference between AI that works and AI that fails.</p>
+        <div class="tag-row"><span class="tag tag-amber">Governance</span><span class="tag tag-amber">GDPR</span><span class="tag tag-amber">EU AI Act</span></div>
+        <div class="session-meta"><span>25 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+
+      <a href="CBS_W1_S4_Quantum.html" class="session-card s4">
+        <div class="session-label">Session 4 &middot; Day 2</div>
+        <h3 class="session-title">Quantum Computing</h3>
+        <p class="session-description">Qubits, superposition, entanglement, interference, six hardware types, Grover's and Shor's algorithms, and the cryptographic threat.</p>
+        <div class="tag-row"><span class="tag tag-coral">Quantum</span><span class="tag tag-coral">Cryptography</span><span class="tag tag-coral">Hardware</span></div>
+        <div class="session-meta"><span>40 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+
+      <a href="CBS_W1_S5_Blockchain.html" class="session-card s5">
+        <div class="session-label">Session 5 &middot; Day 3</div>
+        <h3 class="session-title">Blockchain &amp; Distributed Ledgers</h3>
+        <p class="session-description">Trust without intermediaries, settlement flows, types of blockchain, mining, consensus, finality, and where it has and hasn't delivered.</p>
+        <div class="tag-row"><span class="tag tag-coral">Blockchain</span><span class="tag tag-coral">Settlement</span><span class="tag tag-coral">DLT</span></div>
+        <div class="session-meta"><span>23 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+
+      <a href="CBS_W1_S6_Synthesis.html" class="session-card s6">
+        <div class="session-label">Session 6 &middot; Day 3</div>
+        <h3 class="session-title">Synthesis &amp; Integration</h3>
+        <p class="session-description">Connecting all four domains into one integrated architecture. Dependency chains, cross-domain scenarios, and what it all means together.</p>
+        <div class="tag-row"><span class="tag tag-purple">Synthesis</span><span class="tag tag-purple">D3 Architecture</span></div>
+        <div class="session-meta"><span>22 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="week" id="week-2">
+    <div class="week-header"><span class="week-badge w2">Week 2</span><h2 class="week-title">Cases, Reasoning &amp; Outcomes</h2></div>
+    <p class="week-subtitle">15 real-world cases across 4 teaching days &mdash; what was attempted, what went wrong, how to rescue it</p>
+    <div class="session-grid">
+      <a href="CBS_W2_Cases.html" class="session-card w2">
+        <div class="session-label">Days 4&ndash;7 &middot; Week 2</div>
+        <h3 class="session-title">When Good Metrics Go Bad</h3>
+        <p class="session-description">10 laws of system failure, then 19 real-world cases: pipeline failures, data bias, institutional blindness, systemic governance.</p>
+        <div class="tag-row"><span class="tag tag-amber">19 Cases</span><span class="tag tag-amber">Goodhart to Amara</span></div>
+        <div class="session-meta"><span>127 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+      <a href="CBS_W2_Case_Visuals.html" class="session-card w2v">
+        <div class="session-label">Companion &middot; Week 2</div>
+        <h3 class="session-title">Case Study Visuals</h3>
+        <p class="session-description">Force-directed concept maps, one per case. Built alongside the lecture &mdash; a growing visual library.</p>
+        <div class="tag-row"><span class="tag tag-teal">D3.js</span><span class="tag tag-teal">In Progress</span></div>
+        <div class="session-meta"><span>17 of 19 cases</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+      <a href="CBS_Exam_Approach.html" class="session-card exam">
+        <div class="session-label">Pre-Exam &middot; Week 2</div>
+        <h3 class="session-title">How to Give a Better Answer</h3>
+        <p class="session-description">CBS 12-point scale, sample questions with tiered answers, concept highlighting, and the life-exam framing. Built for the day before case presentations.</p>
+        <div class="tag-row"><span class="tag tag-coral">Exam Prep</span><span class="tag tag-coral">22 slides</span></div>
+        <div class="session-meta"><span>2 sample questions</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+      <a href="CBS_Practice_Test.html" class="session-card practice">
+        <div class="session-label">Practice &middot; Week 2</div>
+        <h3 class="session-title">Practice Test</h3>
+        <p class="session-description">15 scenario-first questions across AI/ML, governance, quantum, and blockchain. Answers reveal on click. These scenarios will not appear in the main exam.</p>
+        <div class="tag-row"><span class="tag tag-teal">15 Questions</span><span class="tag tag-teal">~45 min</span></div>
+        <div class="session-meta"><span>4 sections</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="week" id="week-3">
+    <div class="week-header"><span class="week-badge w3">Week 3</span><h2 class="week-title">Advanced Topics &amp; Conclusion</h2></div>
+    <p class="week-subtitle">13 near-future hypothetical cases &mdash; no outcomes, only tensions &mdash; your job is to design the governance response</p>
+    <div class="session-grid">
+      <a href="CBS_W3_Opening_Recap.html" class="session-card w3">
+        <div class="session-label">Opening &middot; Week 3</div>
+        <h3 class="session-title">Opening Recap &amp; Recognition Drills</h3>
+        <p class="session-description">Week 2 laws, bias types, proxy types, and system-property collisions across governance, quantum, and blockchain &mdash; plus a full precision/recall build-the-matrix drill. Read the situation, name the shape.</p>
+        <div class="tag-row"><span class="tag tag-teal">30 Slides</span><span class="tag tag-teal">Interactive Drills</span></div>
+        <div class="session-meta"><span>8 cases recapped</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+      <div class="session-card placeholder">
+        <div class="session-label">Days 8&ndash;10 &middot; Week 3</div>
+        <h3 class="session-title">Hypothetical Scenarios</h3>
+        <p class="session-description">Central bank AI, hospital triage, pension fund quantum risk, sovereign AI, post-quantum cryptography decisions, and more. No right answers.</p>
+        <span class="placeholder-badge">Available Week 3</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" id="reference">
+    <div class="week-header"><span class="week-label">Reference Material</span></div>
+    <div class="session-grid">
+      <a href="CBS_List_of_Concepts.html" class="session-card concepts">
+        <div class="session-label">Reference</div>
+        <h3 class="session-title">List of Concepts</h3>
+        <p class="session-description">Primary, secondary, and tertiary concepts across all four domains — organised by topic and importance tier.</p>
+        <div class="tag-row"><span class="tag tag-amber">4 Topics</span><span class="tag tag-amber">3 Tiers</span></div>
+        <div class="session-meta"><span>6 slides</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+      <a href="CBS_Course_Glossary.html" class="session-card glossary">
+        <div class="session-label">Reference</div>
+        <h3 class="session-title">Glossary of Terms</h3>
+        <p class="session-description">105 terms across AI/ML, Data Governance, Quantum, and Blockchain. Search by keyword, filter by topic, expand for definition and case example.</p>
+        <div class="tag-row"><span class="tag tag-teal">105 Terms</span><span class="tag tag-teal">Searchable</span></div>
+        <div class="session-meta"><span>Open-book reference</span><span class="session-arrow">&rarr;</span></div>
+      </a>
+    </div>
+  </section>
 
 </div>
-
-<!-- Subtle Not Found Notification Layer -->
-<div id="notFoundToast" class="toast-notification">Company profile parameters not found in local index registry.</div>
-
+<footer class="footer">
+  <div style="font-family:var(--mono);font-size:0.85em;margin-bottom:12px">Copenhagen Business School &middot; Summer 2026 &middot; BA-BHAAI1115U</div>
+  <div style="color:var(--c-muted);font-size:0.9em">All files are self-contained &mdash; no internet connection required to present.</div>
+</footer>
 <script>
-  const DATA = {
-    love: {
-      ikigai: "What You Love", vc: "Founder Passion",
-      desc: "Conviction that survives the years when the metrics say quit. Alone, it has no market, no craft, and no model behind it.",
-      great: { person:{name:"Sara Blakely", note:"Started with obsession and a small savings, no apparel expertise, no proven demand and no model, then built the product, market and revenue around the conviction."}, company:{name:"Spanx", note:"Grew from one founder's belief into a category by adding the craft, the market and the economics that raw passion alone never guarantees."} },
-      poor: { person:{name:"Ben Kaufman", note:"Channelled real inventor passion into a community for making products, but never built the discipline or the model to sustain it."}, company:{name:"Quirky", note:"Passion for invention outran any durable skill or economics; the company burned through funding and filed for bankruptcy in 2015."} }
-    },
-    worldneeds: {
-      ikigai: "What The World Needs", vc: "Market Need",
-      desc: "A large, urgent, underserved demand. Alone, no one on the team loves it, can build it, or has priced it.",
-      great: { person:{name:"Neil Blumenthal", note:"Spotted an obvious unmet need, affordable eyewear, without starting from personal obsession, then built the brand craft and the model around it."}, company:{name:"Warby Parker", note:"Began from a clear market gap rather than founder passion, and added the skill and economics needed to hold it."} },
-      poor: { person:{name:"Julie Wainwright", note:"Bet on a real-looking demand for online pet supply with no workable economics, edge or deep conviction underneath."}, company:{name:"Pets.com", note:"A genuine-seeming need with no viable model or moat; it collapsed within a year of its 2000 IPO."} }
-    },
-    goodat: {
-      ikigai: "What You're Good At", vc: "Right To Win",
-      desc: "Durable, hard-to-copy expertise. Alone, the skill points at no market, no passion and no revenue.",
-      great: { person:{name:"Demis Hassabis", note:"Assembled world-class research capability with no product, market or revenue, then found application and a model through Google."}, company:{name:"DeepMind", note:"Pure technical depth for years without a business; the market and economics arrived only once the skill was pointed at real problems."} },
-      poor: { person:{name:"Rony Abovitz", note:"Marshalled dazzling engineering talent with no real market or model to put it to work."}, company:{name:"Magic Leap", note:"Extraordinary capability and billions raised, but no demand or economics beneath it; valuation and ambitions collapsed."} }
-    },
-    paidfor: {
-      ikigai: "What You Can Be Paid For", vc: "Monetization",
-      desc: "A model where customers pay enough, repeatedly, to make the unit economics work. Alone, the model sits under no real demand, craft or conviction.",
-      great: { person:{name:"Jay Walker", note:"Started from a pricing and revenue mechanic, name-your-own-price, and built genuine demand and capability around it."}, company:{name:"Priceline", note:"A monetization idea first, later grounded in a real travel market and durable operations."} },
-      poor: { person:{name:"Mitch Lowe", note:"Leaned on a headline-grabbing price as the whole business, with no sustainable model, edge or real alignment."}, company:{name:"MoviePass", note:"A monetization gimmick with nothing durable underneath; unit economics were upside down and it imploded."} }
-    },
-    mission: {
-      ikigai: "Mission", vc: "Founder-Market",
-      desc: "Love plus real-world need. On its own, still missing the craft to build it and a way to charge.",
-      great: { person:{name:"Luis von Ahn", note:"Paired a genuine mission for accessible education with a vast real need, then built the technical craft and the model it required."}, company:{name:"Duolingo", note:"Started from love and need, and closed the gap by adding gamified skill and a working freemium model."} },
-      poor: { person:{name:"Shai Agassi", note:"Combined real climate conviction with a real need for EV infrastructure, but lacked the automotive engineering depth and the economics."}, company:{name:"Better Place", note:"Passion and demand were real; the missing skill and viable model sank roughly $850M by its 2013 bankruptcy."} }
-    },
-    passion: {
-      ikigai: "Passion", vc: "Founder-Market Fit",
-      desc: "Love plus skill. On its own, still missing real demand and a way to charge.",
-      great: { person:{name:"Dylan Field", note:"Loved the problem and had deep technical craft in browser graphics, then found the real market and model for collaborative design."}, company:{name:"Figma", note:"Love and skill came first; enduring value arrived once genuine demand and a model were added."} },
-      poor: { person:{name:"Dave Morin", note:"Built a beautifully crafted product he cared about, without the real demand or model to carry it."}, company:{name:"Path", note:"Elegant and loved by its makers, but no market at scale or durable economics; it shut down."} }
-    },
-    vocation: {
-      ikigai: "Vocation", vc: "Scalable Timing",
-      desc: "Need plus monetization. On its own, still missing genuine conviction and a durable edge.",
-      great: { person:{name:"Tony Xu", note:"Seized a clear need with an obvious model in a crowded, copyable market, then built the logistics skill and conviction to outlast rivals."}, company:{name:"DoorDash", note:"Need and economics were the starting point; survival came from adding operational depth others lacked."} },
-      poor: { person:{name:"Matt Salzberg", note:"Rode real demand with a clear subscription model, but without a defensible edge to protect it."}, company:{name:"Blue Apron", note:"Need and monetization were present; with no moat, larger players eroded the business."} }
-    },
-    profession: {
-      ikigai: "Profession", vc: "Defensible Model",
-      desc: "Skill plus monetization. On its own, still missing real demand and a reason to care.",
-      great: { person:{name:"Jensen Huang", note:"Ran a deeply skilled, well-monetized graphics business for years before AI created the enormous demand that made it essential."}, company:{name:"NVIDIA", note:"Skill and economics existed long before the market did; the missing need arrived and completed the picture."} },
-      poor: { person:{name:"J Allard", note:"Delivered competent hardware with a clear model, but against no real unmet need and with little conviction behind it."}, company:{name:"Microsoft Zune", note:"Skilled and monetizable, yet with no demand it didn't already cede to the iPod; it faded out."} }
-    },
-    tri_nomodel: {
-      ikigai: "Delight & fullness, but no wealth", vc: "No Business Model",
-      desc: "Loved by users, genuinely needed, and well built, with no way to turn any of it into revenue. Three ingredients present; monetization missing.",
-      great: { person:{name:"Chad Hurley", note:"Ran a beloved, in-demand, technically strong product that launched unmonetized, then closed the gap by pairing it with Google's advertising engine."}, company:{name:"YouTube", note:"Had love, need and engineering long before a model; monetization arrived only once ads were bottled on post-acquisition."} },
-      poor: { person:{name:"Dom Hofmann", note:"Built a culturally beloved, technically excellent product, but no revenue path to pay creators or sustain it was ever established."}, company:{name:"Vine", note:"Adored and widely used with strong tech, yet Twitter never built a business model around it; shut down in 2017."} }
-    },
-    tri_nowin: {
-      ikigai: "Excitement & complacency, but uncertainty", vc: "No Right to Win",
-      desc: "Wanted, monetizable, and driven by real energy, but with no durable edge, so anyone can copy it. Three ingredients present; defensibility missing.",
-      great: { person:{name:"Travis Kalanick", note:"Started from trivially copyable mechanics but compounded network density, scale and logistics into a genuine moat over time."}, company:{name:"Uber", note:"Early operations were easy to clone; durable advantage came only from relentless density and scale, not the original idea."} },
-      poor: { person:{name:"Andrew Mason", note:"Rode real demand with a clear revenue model, but nothing stopped competitors from cloning it wholesale."}, company:{name:"Groupon", note:"Genuine appetite and clear economics, but zero defensibility invited copycats; growth and margins eroded fast."} }
-    },
-    tri_nomarket: {
-      ikigai: "Satisfaction, but a feeling of uselessness", vc: "No Market Need",
-      desc: "Founder passion, real craft, and a workable price, aimed at demand that wasn't actually there. Three ingredients present; market need missing.",
-      great: { person:{name:"Stewart Butterfield", note:"Poured skill and a viable model into a game nobody wanted, then redirected the same team at a real, urgent need for team messaging."}, company:{name:"Slack", note:"Emerged from the wreckage of a game (Glitch) by pointing existing craft and economics at demand that genuinely existed."} },
-      poor: { person:{name:"Doug Evans", note:"Beautifully engineered a monetizable product he loved, without confirming anyone actually needed it."}, company:{name:"Juicero", note:"Elegant hardware and a subscription model, but almost no one needed a $400 connected juice press; shut down in 2017."} }
-    },
-    tri_noconv: {
-      ikigai: "Comfortable, but a feeling of emptiness", vc: "No Founder Conviction",
-      desc: "Skilled, needed, and monetizable, but built defensively, with no genuine founder belief to carry the hard calls. Three ingredients present; conviction missing.",
-      great: { person:{name:"Satya Nadella", note:"Microsoft already had the skill, market and model; a renewed sense of mission and culture is what finally converted latent capability into cloud leadership."}, company:{name:"Microsoft Azure", note:"The technical and commercial pieces existed for years; conviction and cultural change unlocked them."} },
-      poor: { person:{name:"Vic Gundotra", note:"Marshaled enormous resources against a real-seeming need, but the effort was a strategic reaction rather than a conviction."}, company:{name:"Google+", note:"Skilled, resourced and monetizable, yet built to answer Facebook rather than from belief; shut down in 2019."} }
-    },
-    center: {
-      ikigai: "Ikigai", vc: "The Fundable Deal",
-      desc: "All four circles overlap: a founder who loves the problem, is uniquely equipped to solve it, that the market urgently needs, priced in a way people will pay for.",
-      great: { person:{name:"Melanie Perkins", note:"Loved accessible design, had the product skill to build it, met a real unmet need, and layered a freemium model that scaled."}, company:{name:"Canva", note:"All four dimensions aligned at once, turning a design tool into a decacorn used by hundreds of millions."} },
-      poor: { person:{name:"Adam Neumann", note:"Had enormous passion and market vision, but the business lacked a real moat or a credible path to sustainable unit economics."}, company:{name:"WeWork", note:"Raised tens of billions on vision alone; the IPO collapsed in 2019 once investors scrutinized the actual economics."} }
-    }
-  };
-
-  const SEARCH_REGISTRY = {
-
-    // ── CENTER: all four (love + need + skill + model) ──────────────────────
-    "canva":          { tier: "success", target: "center", x: "44%",   y: "43%",  label: "Canva",           f: "Melanie Perkins",    n: "All four aligned: founder obsession with design, massive underserved demand, strong product craft, and a freemium model that scaled to hundreds of millions." },
-    "tesla":          { tier: "success", target: "center", x: "49%",   y: "47%",  label: "Tesla",           f: "Elon Musk",          n: "Passion for electrification, urgent climate need, genuine engineering edge, and premium pricing that funded mass-market expansion." },
-    "spotify":        { tier: "success", target: "center", x: "46%",   y: "51%",  label: "Spotify",         f: "Daniel Ek",          n: "Deep love of music, global piracy demand, superior streaming UX, and a subscription model that converted free listeners into paying subscribers." },
-    "airbnb":         { tier: "success", target: "center", x: "52%",   y: "45%",  label: "Airbnb",          f: "Brian Chesky",       n: "Founder empathy for travellers, unmet demand for affordable local stays, strong trust infrastructure, and two-sided take-rate economics." },
-    "wework":         { tier: "fail",    target: "center", x: "54%",   y: "53%",  label: "WeWork",          f: "Adam Neumann",       n: "Real demand and passion, but the model was long-lease/short-sublease — structurally fragile; the IPO collapse exposed the unit economics." },
-
-    // ── LOVE only (passion, no skill / need / model) ─────────────────────────
-    "spanx":          { tier: "success", target: "love",   x: "13%",   y: "13%",  label: "Spanx",           f: "Sara Blakely",       n: "Started from pure personal obsession; no industry expertise, no proven demand, no model — built all three around the conviction." },
-    "quirky":         { tier: "fail",    target: "love",   x: "18%",   y: "18%",  label: "Quirky",          f: "Ben Kaufman",        n: "Community passion for invention with no durable skill layer or viable unit economics; burned through funding and filed for bankruptcy." },
-    "thrillist":      { tier: "meh",     target: "love",   x: "15%",   y: "22%",  label: "Thrillist",       f: "Ben Lerer",          n: "Founded on genuine love of city nightlife with no clear model; pivoted repeatedly before finding commerce, never reaching breakout scale." },
-    "color labs":     { tier: "fail",    target: "love",   x: "21%",   y: "14%",  label: "Color Labs",      f: "Bill Nguyen",        n: "$41M raised on founder enthusiasm for social photos before any skill validation or demand evidence; shut down within two years." },
-    "colorlabs":      { tier: "fail",    target: "love",   x: "21%",   y: "14%",  label: "Color Labs",      f: "Bill Nguyen",        n: "$41M raised on founder enthusiasm for social photos before any skill validation or demand evidence; shut down within two years." },
-    "fieldofneighbors":{ tier: "fail",   target: "love",   x: "23%",   y: "21%",  label: "Field of Neighbors", f: "Various",         n: "Hyper-local social passion project with no skill infrastructure or monetization path; remained a niche product with no traction." },
-
-    // ── WORLD NEEDS only (need, no love / skill / model) ─────────────────────
-    "warby parker":   { tier: "success", target: "worldneeds", x: "83%", y: "13%", label: "Warby Parker",   f: "Neil Blumenthal",    n: "Spotted a clear gap — overpriced eyewear — without starting from personal obsession; then added brand craft and DTC economics." },
-    "warbyparker":    { tier: "success", target: "worldneeds", x: "83%", y: "13%", label: "Warby Parker",   f: "Neil Blumenthal",    n: "Spotted a clear gap — overpriced eyewear — without starting from personal obsession; then added brand craft and DTC economics." },
-    "pets.com":       { tier: "fail",    target: "worldneeds", x: "77%", y: "19%", label: "Pets.com",       f: "Julie Wainwright",   n: "Real demand for online pet supply, but no viable logistics model or defensible edge; collapsed within a year of its 2000 IPO." },
-    "petscom":        { tier: "fail",    target: "worldneeds", x: "77%", y: "19%", label: "Pets.com",       f: "Julie Wainwright",   n: "Real demand for online pet supply, but no viable logistics model or defensible edge; collapsed within a year of its 2000 IPO." },
-    "webvan":         { tier: "fail",    target: "worldneeds", x: "80%", y: "23%", label: "Webvan",         f: "Louis Borders",      n: "Genuine consumer need for grocery delivery, but expanded infrastructure faster than demand and logistics unit economics could support." },
-    "planetout":      { tier: "meh",     target: "worldneeds", x: "86%", y: "18%", label: "PlanetOut",      f: "Megan Smith",        n: "Addressed a real underserved community need for LGBTQ+ media, but lacked a durable model as social platforms absorbed the audience." },
-    "care.com":       { tier: "success", target: "worldneeds", x: "84%", y: "22%", label: "Care.com",       f: "Sheila Marcelo",     n: "Identified a clear market gap in childcare and elder care matching; built the model and marketplace infrastructure around the need." },
-    "carecom":        { tier: "success", target: "worldneeds", x: "84%", y: "22%", label: "Care.com",       f: "Sheila Marcelo",     n: "Identified a clear market gap in childcare and elder care matching; built the model and marketplace infrastructure around the need." },
-
-    // ── GOOD AT only (skill, no love / need / model) ─────────────────────────
-    "deepmind":       { tier: "success", target: "goodat",  x: "13%",   y: "83%",  label: "DeepMind",       f: "Demis Hassabis",     n: "World-class research capability for years with no product or revenue; found application and a model through Google acquisition." },
-    "magic leap":     { tier: "fail",    target: "goodat",  x: "19%",   y: "77%",  label: "Magic Leap",     f: "Rony Abovitz",       n: "Extraordinary AR engineering with no real consumer demand or monetization; raised $2.6B and pivoted to enterprise after retail failure." },
-    "magicleap":      { tier: "fail",    target: "goodat",  x: "19%",   y: "77%",  label: "Magic Leap",     f: "Rony Abovitz",       n: "Extraordinary AR engineering with no real consumer demand or monetization; raised $2.6B and pivoted to enterprise after retail failure." },
-    "wolfram":        { tier: "meh",     target: "goodat",  x: "23%",   y: "80%",  label: "Wolfram Research",f: "Stephen Wolfram",    n: "Unmatched computational knowledge depth but chronically narrow market and no scalable model to convert skill into broad revenue." },
-    "wolfram research":{ tier: "meh",    target: "goodat",  x: "23%",   y: "80%",  label: "Wolfram Research",f: "Stephen Wolfram",    n: "Unmatched computational knowledge depth but chronically narrow market and no scalable model to convert skill into broad revenue." },
-    "d-wave":         { tier: "meh",     target: "goodat",  x: "16%",   y: "86%",  label: "D-Wave",         f: "Geordie Rose",       n: "Genuine quantum computing hardware skill, but limited practical applications and a revenue model still searching for its market." },
-    "dwave":          { tier: "meh",     target: "goodat",  x: "16%",   y: "86%",  label: "D-Wave",         f: "Geordie Rose",       n: "Genuine quantum computing hardware skill, but limited practical applications and a revenue model still searching for its market." },
-    "vicarious":      { tier: "fail",    target: "goodat",  x: "21%",   y: "84%",  label: "Vicarious",      f: "Scott Phoenix",      n: "Deep AI research talent backed by Zuckerberg and Musk, but no commercial product or monetization before being absorbed by Salesforce." },
-
-    // ── PAID FOR only (model, no love / need / skill) ────────────────────────
-    "priceline":      { tier: "success", target: "paidfor", x: "83%",   y: "83%",  label: "Priceline",      f: "Jay Walker",         n: "Built around a pricing mechanic — name-your-own-price — then found the travel market and operations to make it durable." },
-    "moviepass":      { tier: "fail",    target: "paidfor", x: "77%",   y: "77%",  label: "MoviePass",      f: "Mitch Lowe",         n: "A subscription price point with no sustainable unit economics underneath; burned through capital and collapsed." },
-    "zynga":          { tier: "meh",     target: "paidfor", x: "80%",   y: "80%",  label: "Zynga",          f: "Mark Pincus",        n: "Mastered virtual goods monetization mechanics but built on Facebook's platform with no defensible product love or moat." },
-    "gilt groupe":    { tier: "meh",     target: "paidfor", x: "86%",   y: "77%",  label: "Gilt Groupe",    f: "Kevin Ryan",         n: "Flash-sale model drove early revenue but no brand conviction or moat; sold to Hudson's Bay for a fraction of its peak valuation." },
-    "giltgroupe":     { tier: "meh",     target: "paidfor", x: "86%",   y: "77%",  label: "Gilt Groupe",    f: "Kevin Ryan",         n: "Flash-sale model drove early revenue but no brand conviction or moat; sold to Hudson's Bay for a fraction of its peak valuation." },
-    "fab.com":        { tier: "fail",    target: "paidfor", x: "84%",   y: "84%",  label: "Fab.com",        f: "Jason Goldberg",     n: "Flash-sale model copied from Gilt with no design conviction or skill; pivoted repeatedly before shutting down." },
-    "fabcom":         { tier: "fail",    target: "paidfor", x: "84%",   y: "84%",  label: "Fab.com",        f: "Jason Goldberg",     n: "Flash-sale model copied from Gilt with no design conviction or skill; pivoted repeatedly before shutting down." },
-
-    // ── MISSION: love + need (no skill / model) ───────────────────────────────
-    "duolingo":       { tier: "success", target: "mission", x: "45%",   y: "20%",  label: "Duolingo",       f: "Luis von Ahn",       n: "Passion for accessible education meeting vast real demand; closed the gap by adding gamified product skill and a freemium model." },
-    "better place":   { tier: "fail",    target: "mission", x: "50%",   y: "23%",  label: "Better Place",   f: "Shai Agassi",        n: "Genuine climate conviction and real EV infrastructure need; missing automotive engineering depth and viable unit economics." },
-    "betterplace":    { tier: "fail",    target: "mission", x: "50%",   y: "23%",  label: "Better Place",   f: "Shai Agassi",        n: "Genuine climate conviction and real EV infrastructure need; missing automotive engineering depth and viable unit economics." },
-    "kiva":           { tier: "success", target: "mission", x: "48%",   y: "18%",  label: "Kiva",           f: "Matt Flannery",      n: "Deep conviction in microfinance meeting a global need for credit access; built the platform skill and a donation-fee model around it." },
-    "theranos":       { tier: "fail",    target: "mission", x: "52%",   y: "20%",  label: "Theranos",       f: "Elizabeth Holmes",   n: "Genuine passion for democratising blood testing meeting massive healthcare need; the missing ingredient was the actual technical skill." },
-    "one laptop per child": { tier: "meh", target: "mission", x: "46%", y: "25%",  label: "One Laptop Per Child", f: "Nicholas Negroponte", n: "Strong educational conviction and clear global need, but the device lacked the software ecosystem and a sustainable distribution model." },
-    "olpc":           { tier: "meh",     target: "mission", x: "46%",   y: "25%",  label: "One Laptop Per Child", f: "Nicholas Negroponte", n: "Strong educational conviction and clear global need, but the device lacked the software ecosystem and a sustainable distribution model." },
-
-    // ── PASSION: love + skill (no need / model) ───────────────────────────────
-    "figma":          { tier: "success", target: "passion", x: "20%",   y: "45%",  label: "Figma",          f: "Dylan Field",        n: "Love of browser-native graphics combined with deep WebGL skill; found the real design collaboration market and a SaaS model." },
-    "path":           { tier: "fail",    target: "passion", x: "23%",   y: "50%",  label: "Path",           f: "Dave Morin",         n: "Beautifully crafted social app from a passionate team; no mass market demand or monetization ever materialised." },
-    "portfolio":      { tier: "fail",    target: "passion", x: "18%",   y: "52%",  label: "Posterous",      f: "Sachin Agarwal",     n: "Loved and well-built blogging tool with no model and a market already dominated by WordPress and Tumblr; acquired and shut down." },
-    "posterous":      { tier: "fail",    target: "passion", x: "18%",   y: "52%",  label: "Posterous",      f: "Sachin Agarwal",     n: "Loved and well-built blogging tool with no model and a market already dominated by WordPress and Tumblr; acquired and shut down." },
-    "game neverending":{ tier: "meh",    target: "passion", x: "25%",   y: "47%",  label: "Game Neverending", f: "Stewart Butterfield", n: "Craft and passion for social gaming with no viable market; pivoted into Flickr, which did find a need." },
-    "loom":           { tier: "success", target: "passion", x: "21%",   y: "42%",  label: "Loom",           f: "Vinay Hiremath",     n: "Passion for async communication plus video engineering skill; the remote-work shift revealed the latent demand and enabled a model." },
-
-    // ── VOCATION: need + model (no love / skill) ──────────────────────────────
-    "doordash":       { tier: "success", target: "vocation", x: "78%",  y: "45%",  label: "DoorDash",       f: "Tony Xu",            n: "Clear demand and take-rate model from day one; built the logistics skill and density moat that rivals lacked." },
-    "blue apron":     { tier: "fail",    target: "vocation", x: "78%",  y: "50%",  label: "Blue Apron",     f: "Matt Salzberg",      n: "Real meal-kit demand and a subscription model, but no defensible skill or moat; grocery giants cloned it immediately." },
-    "blueapron":      { tier: "fail",    target: "vocation", x: "78%",  y: "50%",  label: "Blue Apron",     f: "Matt Salzberg",      n: "Real meal-kit demand and a subscription model, but no defensible skill or moat; grocery giants cloned it immediately." },
-    "groupon":        { tier: "meh",     target: "vocation", x: "75%",  y: "52%",  label: "Groupon",        f: "Andrew Mason",       n: "Massive early demand and clear take-rate economics, but zero technical moat; cloned globally and margins collapsed." },
-    "living social":  { tier: "fail",    target: "vocation", x: "82%",  y: "48%",  label: "LivingSocial",   f: "Tim O'Shaughnessy",  n: "Rode real daily-deals demand with a functional model, but could not defend the space against Groupon or build skill differentiation." },
-    "livingsocial":   { tier: "fail",    target: "vocation", x: "82%",  y: "48%",  label: "LivingSocial",   f: "Tim O'Shaughnessy",  n: "Rode real daily-deals demand with a functional model, but could not defend the space against Groupon or build skill differentiation." },
-    "honestbee":      { tier: "fail",    target: "vocation", x: "80%",  y: "54%",  label: "Honestbee",      f: "Joel Sng",           n: "Asian grocery delivery with genuine demand and a clear model, but no operational skill to sustain unit economics across markets." },
-
-    // ── PROFESSION: skill + model (no love / need) ────────────────────────────
-    "nvidia":         { tier: "success", target: "profession", x: "45%", y: "78%", label: "NVIDIA",         f: "Jensen Huang",       n: "Deep GPU skill and strong hardware margins for decades; the AI wave created the enormous demand that completed the picture." },
-    "zune":           { tier: "fail",    target: "profession", x: "50%", y: "78%", label: "Microsoft Zune", f: "J Allard",           n: "Competent hardware and a clear price model, but no genuine demand the iPod had not already captured; discontinued in 2011." },
-    "celonis":        { tier: "success", target: "profession", x: "47%", y: "82%", label: "Celonis",        f: "Alexander Rinke",    n: "Deep process-mining engineering skill and a clear enterprise SaaS model; the market for operational efficiency caught up and validated it." },
-    "palantir":       { tier: "success", target: "profession", x: "52%", y: "75%", label: "Palantir",       f: "Peter Thiel",        n: "Formidable data-integration engineering and government contract revenue; the civilian market need took over a decade to materialise." },
-    "wolfram alpha":  { tier: "meh",     target: "profession", x: "48%", y: "85%", label: "Wolfram Alpha",  f: "Stephen Wolfram",    n: "Unparalleled computational knowledge skill and a clear answer-engine model, but limited consumer demand once Google absorbed the use case." },
-    "wolframalpha":   { tier: "meh",     target: "profession", x: "48%", y: "85%", label: "Wolfram Alpha",  f: "Stephen Wolfram",    n: "Unparalleled computational knowledge skill and a clear answer-engine model, but limited consumer demand once Google absorbed the use case." },
-
-    // ── TRI_NOMODEL: love + need + skill, NO monetization ────────────────────
-    "youtube":        { tier: "success", target: "tri_nomodel", x: "34%", y: "34%", label: "YouTube",       f: "Chad Hurley",        n: "Beloved, needed, and well-built; launched with no model, then Google's ad infrastructure provided the missing monetization layer." },
-    "vine":           { tier: "fail",    target: "tri_nomodel", x: "38%", y: "40%", label: "Vine",          f: "Dom Hofmann",        n: "Culturally loved, technically strong, and meeting real short-video demand; Twitter never built a revenue path and shut it down." },
-    "instagram":      { tier: "success", target: "tri_nomodel", x: "35%", y: "38%", label: "Instagram",     f: "Kevin Systrom",      n: "Loved photo product meeting genuine social need with strong mobile craft; no model at acquisition — Facebook supplied the ad engine." },
-    "wikipedia":      { tier: "success", target: "tri_nomodel", x: "40%", y: "34%", label: "Wikipedia",     f: "Jimmy Wales",        n: "Deep community love, universal knowledge need, and strong editorial craft; sustains itself on donations rather than a commercial model." },
-    "soundcloud":     { tier: "meh",     target: "tri_nomodel", x: "37%", y: "42%", label: "SoundCloud",    f: "Alexander Ljung",    n: "Loved by artists and listeners, genuinely needed, strong audio tech; monetization arrived late and remains structurally thin." },
-
-    // ── TRI_NOWIN: love + need + model, NO defensible skill/moat ─────────────
-    "uber":           { tier: "success", target: "tri_nowin",   x: "62%", y: "34%", label: "Uber",          f: "Travis Kalanick",    n: "Passion, demand, and clear take-rate from the start; built the logistics density moat that finally made it defensible." },
-    "lyft":           { tier: "meh",     target: "tri_nowin",   x: "65%", y: "38%", label: "Lyft",          f: "Logan Green",        n: "Real demand and a working model but no moat Uber could not match; remains subscale despite years of competition." },
-    "living spaces":  { tier: "meh",     target: "tri_nowin",   x: "60%", y: "40%", label: "Fab.com",       f: "Jason Goldberg",     n: "Real consumer demand for design goods and a functioning flash-sale model with no skill moat; cloned out of relevance." },
-    "daily harvest":  { tier: "meh",     target: "tri_nowin",   x: "63%", y: "42%", label: "Daily Harvest", f: "Rachel Drori",       n: "Passionate mission, clear subscription model, and real healthy-food demand, but no ingredient sourcing or logistics moat." },
-    "dailyharvest":   { tier: "meh",     target: "tri_nowin",   x: "63%", y: "42%", label: "Daily Harvest", f: "Rachel Drori",       n: "Passionate mission, clear subscription model, and real healthy-food demand, but no ingredient sourcing or logistics moat." },
-    "homejoy":        { tier: "fail",    target: "tri_nowin",   x: "58%", y: "37%", label: "Homejoy",       f: "Adora Cheung",       n: "Real demand for on-demand cleaning, clear model, genuine founder drive — but no skill moat; workers reclassified and the business collapsed." },
-
-    // ── TRI_NOMARKET: love + skill + model, NO real market need ───────────────
-    "slack":          { tier: "success", target: "tri_nomarket", x: "34%", y: "62%", label: "Slack",        f: "Stewart Butterfield", n: "Love, engineering skill, and a freemium model from a failed game; pivoted to messaging where genuine enterprise demand existed." },
-    "juicero":        { tier: "fail",    target: "tri_nomarket", x: "40%", y: "57%", label: "Juicero",      f: "Doug Evans",          n: "Passion, premium engineering, and a subscription model aimed at a problem most people solved with their hands; shut down in 2017." },
-    "google glass":   { tier: "fail",    target: "tri_nomarket", x: "37%", y: "64%", label: "Google Glass", f: "Sergey Brin",         n: "Genuine passion, outstanding engineering, and a premium price point — but consumer demand for heads-up displays did not exist." },
-    "googleglass":    { tier: "fail",    target: "tri_nomarket", x: "37%", y: "64%", label: "Google Glass", f: "Sergey Brin",         n: "Genuine passion, outstanding engineering, and a premium price point — but consumer demand for heads-up displays did not exist." },
-    "quibi":          { tier: "fail",    target: "tri_nomarket", x: "38%", y: "60%", label: "Quibi",        f: "Jeffrey Katzenberg",  n: "Passion for premium mobile content, strong production skill, $1.75B raised — but no evidence anyone wanted 10-minute phone-only shows." },
-    "segway":         { tier: "meh",     target: "tri_nomarket", x: "35%", y: "66%", label: "Segway",       f: "Dean Kamen",          n: "Inventor passion, impressive engineering, and a clear price model; the mass personal-transport need never materialised at scale." },
-
-    // ── TRI_NOCONV: need + skill + model, NO founder conviction ───────────────
-    "azure":          { tier: "success", target: "tri_noconv",  x: "62%", y: "62%", label: "Microsoft Azure", f: "Satya Nadella",    n: "Enterprise need, strong engineering, and a subscription model existed; Nadella's conviction and culture shift converted latent capability into cloud leadership." },
-    "microsoft azure":{ tier: "success", target: "tri_noconv",  x: "62%", y: "62%", label: "Microsoft Azure", f: "Satya Nadella",    n: "Enterprise need, strong engineering, and a subscription model existed; Nadella's conviction and culture shift converted latent capability into cloud leadership." },
-    "google+":        { tier: "fail",    target: "tri_noconv",  x: "57%", y: "57%", label: "Google+",      f: "Vic Gundotra",        n: "Social networking need, Google's engineering might, and a clear path to ads — but built as a strategic reaction, not from belief; shut down 2019." },
-    "googleplus":     { tier: "fail",    target: "tri_noconv",  x: "57%", y: "57%", label: "Google+",      f: "Vic Gundotra",        n: "Social networking need, Google's engineering might, and a clear path to ads — but built as a strategic reaction, not from belief; shut down 2019." },
-    "yahoo":          { tier: "fail",    target: "tri_noconv",  x: "64%", y: "59%", label: "Yahoo",        f: "Marissa Mayer",       n: "Massive audience, strong engineering bench, and search/ad revenue — but leadership never committed a clear conviction on what Yahoo should be." },
-    "ibm watson":     { tier: "meh",     target: "tri_noconv",  x: "60%", y: "65%", label: "IBM Watson",   f: "Ginni Rometty",       n: "Real enterprise AI demand, world-class research depth, and a services model — but no unifying internal conviction on what product to build." },
-    "ibmwatson":      { tier: "meh",     target: "tri_noconv",  x: "60%", y: "65%", label: "IBM Watson",   f: "Ginni Rometty",       n: "Real enterprise AI demand, world-class research depth, and a services model — but no unifying internal conviction on what product to build." },
-    "blackberry":     { tier: "fail",    target: "tri_noconv",  x: "59%", y: "63%", label: "BlackBerry",   f: "Mike Lazaridis",      n: "Enterprise mobile need, strong security engineering, and hardware revenue — but no conviction to cannibalise their keyboard franchise for touchscreens." }
-  };
-
-  // ── four-dimension coverage per region ──────────────────────────────────
-  const DIMS = {
-    love:        { love:1, need:0, skill:0, model:0 },
-    worldneeds:  { love:0, need:1, skill:0, model:0 },
-    goodat:      { love:0, need:0, skill:1, model:0 },
-    paidfor:     { love:0, need:0, skill:0, model:1 },
-    mission:     { love:1, need:1, skill:0, model:0 },
-    passion:     { love:1, need:0, skill:1, model:0 },
-    vocation:    { love:0, need:1, skill:0, model:1 },
-    profession:  { love:0, need:0, skill:1, model:1 },
-    tri_nomodel: { love:1, need:1, skill:1, model:0 },
-    tri_nowin:   { love:1, need:1, skill:0, model:1 },
-    tri_nomarket:{ love:1, need:0, skill:1, model:1 },
-    tri_noconv:  { love:0, need:1, skill:1, model:1 },
-    center:      { love:1, need:1, skill:1, model:1 },
-  };
-
-  // Per-region reasons for each dimension being present or absent
-  const DIM_REASONS = {
-    love:        { has:   { love:"Founder obsession is the core origin story." },
-                   miss:  { need:"Market was assumed, not personally felt.", skill:"Capability was aspired to, not proven.", model:"Revenue was not part of the original vision." } },
-    worldneeds:  { has:   { need:"A clear, large, underserved market demand exists." },
-                   miss:  { love:"Built from opportunity, not founder conviction.", skill:"Execution edge was not the starting point.", model:"Pricing and unit economics came after the idea." } },
-    goodat:      { has:   { skill:"Deep, hard-to-copy technical or domain expertise." },
-                   miss:  { love:"Skill-driven, not passion-driven.", need:"No evidence of real customer demand.", model:"No monetization path attached to the capability." } },
-    paidfor:     { has:   { model:"A working revenue mechanic was the founding insight." },
-                   miss:  { love:"Model-first, not conviction-first.", need:"Demand was assumed to follow the price point.", skill:"No durable edge beyond the pricing mechanic." } },
-    mission:     { has:   { love:"Founders genuinely believe in the mission.", need:"A real, large, underserved need exists." },
-                   miss:  { skill:"Technical capability to deliver was absent or unproven.", model:"No viable path to revenue or unit economics." } },
-    passion:     { has:   { love:"Deep personal love of the problem and craft.", skill:"Strong technical or creative capability." },
-                   miss:  { need:"No evidence of mass market demand.", model:"No pricing or monetization path validated." } },
-    vocation:    { has:   { need:"A large, real, urgent market demand.", model:"A clear take-rate or subscription model." },
-                   miss:  { love:"Opportunity-driven, not passion-driven.", skill:"No defensible moat or hard-to-copy capability." } },
-    profession:  { has:   { skill:"Genuine deep expertise and execution edge.", model:"A working, tested revenue model." },
-                   miss:  { love:"Built without founder conviction or deep care.", need:"Market demand was absent or not yet mature." } },
-    tri_nomodel: { has:   { love:"Founders and users love the product.", need:"Clear, large, real demand.", skill:"Strong technical execution." },
-                   miss:  { model:"No monetization path was established." } },
-    tri_nowin:   { has:   { love:"Genuine founder conviction.", need:"Real market demand validated.", model:"A functioning revenue model." },
-                   miss:  { skill:"No defensible moat — the playbook is copyable." } },
-    tri_nomarket:{ has:   { love:"Passion and conviction are strong.", skill:"Real craft and technical edge.", model:"A viable pricing or revenue model." },
-                   miss:  { need:"No evidence of genuine mass market demand." } },
-    tri_noconv:  { has:   { need:"A real, large market need exists.", skill:"Strong technical and operational capability.", model:"A tested revenue model." },
-                   miss:  { love:"Built strategically, not from founder conviction." } },
-    center:      { has:   { love:"Deep founder conviction.", need:"Large validated market.", skill:"Defensible edge.", model:"Working revenue model." },
-                   miss:  {} },
-  };
-
-  const DIM_META = {
-    love:  { label:"Passion",   name:"Love It",    color:"var(--love)"  },
-    need:  { label:"Market",    name:"Need It",    color:"var(--world)" },
-    skill: { label:"Moat",      name:"Good At It", color:"var(--good)"  },
-    model: { label:"Economics", name:"Pay For It", color:"var(--paid)"  },
-  };
-
-  function renderScorecard(region, companyName) {
-    const sc = document.getElementById('scorecard');
-    if (!region || !DIMS[region]) { sc.style.display='none'; return; }
-    const dims = DIMS[region];
-    const reasons = DIM_REASONS[region] || {};
-    sc.style.display = 'grid';
-    sc.innerHTML = ['love','need','skill','model'].map(d => {
-      const has = !!dims[d];
-      const meta = DIM_META[d];
-      const reason = has ? (reasons.has?.[d] || '') : (reasons.miss?.[d] || '');
-      return `<div class="sc-item ${has ? 'has' : 'missing'}">
-        <div class="sc-icon" style="${has ? `background:color-mix(in srgb,${meta.color} 15%,#1A3028)` : ''}">${has ? '✓' : '✗'}</div>
-        <div class="sc-text">
-          <div class="sc-label">${meta.label}</div>
-          <div class="sc-name">${meta.name}</div>
-          <div class="sc-reason">${reason}</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-
-  const checkbox = document.getElementById('lensCheckbox');
-  const body = document.body;
-  const labels = document.querySelectorAll('.lens-label');
-
-  function setLens(vc){
-    body.classList.toggle('lens-vc', vc);
-    checkbox.checked = vc;
-    labels.forEach(l=>{
-      const isVc = l.dataset.lensLabel === 'vc';
-      l.classList.toggle('active', isVc === vc);
-    });
-  }
-
-  checkbox.addEventListener('change', ()=> setLens(checkbox.checked));
-  document.getElementById('lensSwitch').addEventListener('click', (e)=>{
-    if(e.target === checkbox) return;
-    setLens(!checkbox.checked);
-  });
-
-  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    setTimeout(()=> setLens(true), 2600);
-  }
-
-  // ---------- panel data controller ----------
-  const blocks = {
-    great: document.getElementById('blockGreat'),
-    poor: document.getElementById('blockPoor')
-  };
-  
-  const els = {
-    tag: document.getElementById('panelTag'),
-    title: document.getElementById('panelTitle'),
-    ikigai: document.getElementById('panelIkigai'),
-    desc: document.getElementById('panelDesc'),
-    gpName: document.getElementById('greatPersonName'),
-    gpNote: document.getElementById('greatPersonNote'),
-    gcName: document.getElementById('greatCoName'),
-    gcNote: document.getElementById('greatCoNote'),
-    ppName: document.getElementById('poorPersonName'),
-    ppNote: document.getElementById('poorPersonNote'),
-    pcName: document.getElementById('poorCoName'),
-    pcNote: document.getElementById('poorCoNote'),
-    dotsContainer: document.getElementById('dynamicDotsContainer'),
-    searchInput: document.getElementById('frameworkSearchInput'),
-    searchBtn: document.getElementById('frameworkSearchBtn'),
-    toast: document.getElementById('notFoundToast')
-  };
-
-  function openPanel(id){
-    document.querySelectorAll('.example-dot').forEach(d => d.classList.remove('active'));
-    blocks.great.classList.remove('hidden-block');
-    blocks.poor.classList.remove('hidden-block');
-    
-    const d = DATA[id];
-    if(!d) return;
-    els.tag.textContent = d.vc;
-    els.title.textContent = d.vc;
-    els.ikigai.textContent = "Ikigai term: " + d.ikigai;
-    els.desc.textContent = d.desc;
-    els.gpName.textContent = d.great.person.name;
-    els.gpNote.textContent = d.great.person.note;
-    els.gcName.textContent = d.great.company.name;
-    els.gcNote.textContent = d.great.company.note;
-    els.ppName.textContent = d.poor.person.name;
-    els.ppNote.textContent = d.poor.person.note;
-    els.pcName.textContent = d.poor.company.name;
-    els.pcNote.textContent = d.poor.company.note;
-    renderScorecard(id);
-  }
-
-  function showIsolatedNodeDetails(companyProfile, dotElement) {
-    document.querySelectorAll('.example-dot').forEach(d => d.classList.remove('active'));
-    if(dotElement) dotElement.classList.add('active');
-
-    const parentMacro = DATA[companyProfile.target];
-    els.tag.textContent = companyProfile.tier.toUpperCase() + " VECTOR";
-    els.title.textContent = companyProfile.label;
-    els.ikigai.textContent = "Framework Quadrant: " + parentMacro.vc;
-    els.desc.textContent = companyProfile.n;
-    renderScorecard(companyProfile.target, companyProfile.label);
-
-    if (companyProfile.tier === "success") {
-      blocks.great.classList.remove('hidden-block');
-      blocks.poor.classList.add('hidden-block');
-      els.gpName.textContent = companyProfile.f;
-      els.gpNote.textContent = "Demonstrated deep domain alignment criteria parameters.";
-      els.gcName.textContent = companyProfile.label;
-      els.gcNote.textContent = companyProfile.n;
-    } else {
-      blocks.great.classList.add('hidden-block');
-      blocks.poor.classList.remove('hidden-block');
-      els.ppName.textContent = companyProfile.f;
-      els.ppNote.textContent = "Encountered systemic framework execution vulnerabilities.";
-      els.pcName.textContent = companyProfile.label;
-      els.pcNote.textContent = companyProfile.n;
-    }
-  }
-
-  // ---------- AI-powered search ----------
-  const REGION_POSITIONS = {
-    love:         { x: "15%",   y: "15%"   },
-    worldneeds:   { x: "73%",   y: "15%"   },
-    goodat:       { x: "15%",   y: "73%"   },
-    paidfor:      { x: "73%",   y: "73%"   },
-    mission:      { x: "44%",   y: "19%"   },
-    passion:      { x: "19%",   y: "44%"   },
-    vocation:     { x: "75%",   y: "44%"   },
-    profession:   { x: "44%",   y: "75%"   },
-    tri_nomodel:  { x: "35%",   y: "35%"   },
-    tri_nowin:    { x: "60%",   y: "35%"   },
-    tri_nomarket: { x: "35%",   y: "60%"   },
-    tri_noconv:   { x: "60%",   y: "60%"   },
-    center:       { x: "47%",   y: "47%"   },
-  };
-
-  const SYSTEM_PROMPT = `You are a venture capital and startup analyst. When given a company name, you must:
-1. Use web search to look up current information about the company.
-2. Classify it using the ikigai × VC framework with these 13 regions:
-
-SINGLES (one ingredient only):
-- love: Founder passion only — no proven skill, no market need, no business model
-- worldneeds: Market need only — no passion, no skill, no revenue model
-- goodat: Technical skill only — no passion, no market, no monetization
-- paidfor: Monetization/pricing model only — no passion, no skill, no real need
-
-DOUBLES (exactly two):
-- mission: Love + Market Need (missing skill + model) e.g. NGO-style passion projects
-- passion: Love + Skill (missing need + model) e.g. beautiful products with no market
-- vocation: Market Need + Monetization (missing passion + moat)
-- profession: Skill + Monetization (missing passion + real demand)
-
-TRIPLES (exactly three — one missing):
-- tri_nomodel: Love + Need + Skill but NO monetization
-- tri_nowin: Love + Need + Monetization but NO defensible skill/moat
-- tri_nomarket: Love + Skill + Monetization but NO real market need
-- tri_noconv: Need + Skill + Monetization but NO founder conviction/passion
-
-QUAD:
-- center: All four — fundable, complete
-
-For the "tier" field:
-- success: Company navigated its gap and became viable/successful
-- meh: Partial success or ambiguous outcome
-- fail: Failed or was shut down because of the missing ingredient
-
-Respond ONLY with a JSON object, no markdown, no explanation:
-{
-  "label": "Official Company Name",
-  "founder": "Primary Founder Name",
-  "region": "one of the 13 region keys above",
-  "tier": "success|meh|fail",
-  "reasoning": "2-3 sentence explanation of which ingredients are present/missing and why this region fits",
-  "missing": "what ingredient is missing (or 'none' for center)"
-}`;
-
-  let activeSearchKey = null;
-
-  function setSearchLoading(on) {
-    els.searchBtn.disabled = on;
-    els.searchBtn.textContent = on ? "…" : "Search";
-    els.searchInput.disabled = on;
-  }
-
-  function showAIResult(company, result, dotEl) {
-    document.querySelectorAll('.example-dot').forEach(d => d.classList.remove('active'));
-    if (dotEl) dotEl.classList.add('active');
-
-    const parentMacro = DATA[result.region] || {};
-    els.tag.textContent = (result.tier === 'success' ? '✦ ' : result.tier === 'fail' ? '✗ ' : '◎ ') + result.region.replace('tri_no', 'TRIPLE · NO ').toUpperCase();
-    els.title.textContent = result.label;
-    els.ikigai.textContent = "Region: " + (parentMacro.vc || result.region);
-    els.desc.textContent = result.reasoning;
-    renderScorecard(result.region, result.label);
-
-    if (result.tier === 'success') {
-      blocks.great.classList.remove('hidden-block');
-      blocks.poor.classList.add('hidden-block');
-      els.gpName.textContent = result.founder;
-      els.gpNote.textContent = "Navigated the missing ingredient — " + result.missing + " — to reach viability.";
-      els.gcName.textContent = result.label;
-      els.gcNote.textContent = result.reasoning;
-    } else if (result.tier === 'fail') {
-      blocks.great.classList.add('hidden-block');
-      blocks.poor.classList.remove('hidden-block');
-      els.ppName.textContent = result.founder;
-      els.ppNote.textContent = "Stalled or failed due to missing: " + result.missing + ".";
-      els.pcName.textContent = result.label;
-      els.pcNote.textContent = result.reasoning;
-    } else {
-      blocks.great.classList.remove('hidden-block');
-      blocks.poor.classList.remove('hidden-block');
-      els.gpName.textContent = result.founder;
-      els.gpNote.textContent = "Partial alignment — " + result.missing + " remains unresolved.";
-      els.gcName.textContent = result.label;
-      els.gcNote.textContent = result.reasoning;
-      els.ppName.textContent = result.founder;
-      els.ppNote.textContent = "Has not yet closed the gap on: " + result.missing + ".";
-      els.pcName.textContent = result.label;
-      els.pcNote.textContent = "Outcome uncertain — watch for whether they address the missing dimension.";
-    }
-  }
-
-  async function executeEcosystemSearch() {
-    const rawQuery = els.searchInput.value.trim();
-    if (!rawQuery) return;
-    const queryKey = rawQuery.toLowerCase();
-
-    // Check static registry first
-    const staticMatch = SEARCH_REGISTRY[queryKey];
-    if (staticMatch) {
-      const existingDot = document.querySelector(`.example-dot[data-ex="${queryKey}"]`);
-      if (existingDot) { showCompanyDetailsFromNode(queryKey, existingDot); return; }
-      const newDot = document.createElement('div');
-      newDot.className = `example-dot ${staticMatch.tier}`;
-      newDot.dataset.ex = queryKey;
-      newDot.style.left = staticMatch.x;
-      newDot.style.top = staticMatch.y;
-      newDot.title = staticMatch.label;
-      newDot.addEventListener('click', e => { e.stopPropagation(); showCompanyDetailsFromNode(queryKey, newDot); });
-      els.dotsContainer.appendChild(newDot);
-      newDot.classList.add('new-dot');
-      newDot.addEventListener('animationend', () => newDot.classList.remove('new-dot'), { once: true });
-      return;
-    }
-
-    // AI + web search
-    setSearchLoading(true);
-    activeSearchKey = queryKey;
-
-    // Show searching state in panel
-    els.tag.textContent = "SEARCHING…";
-    els.title.textContent = rawQuery;
-    els.ikigai.textContent = "Looking up on the web…";
-    els.desc.textContent = "Researching " + rawQuery + " and classifying it into the framework. This takes a few seconds.";
-    blocks.great.classList.add('hidden-block');
-    blocks.poor.classList.add('hidden-block');
-
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: [{ role: "user", content: `Research and classify this company in the ikigai VC framework: "${rawQuery}"` }]
-        })
-      });
-
-      if (!response.ok) {
-        const errBody = await response.json().catch(() => ({}));
-        throw new Error(`API ${response.status}: ${errBody?.error?.message || response.statusText}`);
-      }
-
-      let data = await response.json();
-      if (activeSearchKey !== queryKey) return;
-
-      // If model used tools, send results back for a second turn
-      if (data.stop_reason === "tool_use") {
-        const toolResults = data.content
-          .filter(b => b.type === "tool_result" || b.type === "tool_use")
-          .map(b => b.type === "tool_use" ? { type: "tool_result", tool_use_id: b.id, content: b.input?.query || "" } : b);
-        const followUp = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model: "claude-sonnet-4-6",
-            max_tokens: 1000,
-            system: SYSTEM_PROMPT,
-            tools: [{ type: "web_search_20250305", name: "web_search" }],
-            messages: [
-              { role: "user", content: `Research and classify this company in the ikigai VC framework: "${rawQuery}"` },
-              { role: "assistant", content: data.content },
-              { role: "user", content: toolResults }
-            ]
-          })
-        });
-        if (!followUp.ok) throw new Error(`Follow-up API ${followUp.status}`);
-        data = await followUp.json();
-        if (activeSearchKey !== queryKey) return;
-      }
-
-      // Extract the final text block
-      const textBlock = data.content.filter(b => b.type === "text").pop();
-      if (!textBlock) throw new Error("No text in response. Raw: " + JSON.stringify(data.content).slice(0,200));
-
-      let clean = textBlock.text.replace(/```json|```/g, "").trim();
-      // Extract JSON if wrapped in prose
-      const jsonMatch = clean.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error("No JSON found in: " + clean.slice(0, 200));
-      const result = JSON.parse(jsonMatch[0]);
-
-      // Validate region
-      if (!REGION_POSITIONS[result.region]) result.region = "center";
-      if (!["success","meh","fail"].includes(result.tier)) result.tier = "meh";
-      if (!result.missing) result.missing = "unknown";
-
-      // Remove any old dot for this key
-      document.querySelector(`.example-dot[data-ex="${queryKey}"]`)?.remove();
-
-      const pos = REGION_POSITIONS[result.region];
-      // Jitter slightly so multiple searches in same region don't stack
-      const jitter = () => (Math.random() - 0.5) * 4 + "%";
-      const dot = document.createElement('div');
-      dot.className = `example-dot ${result.tier}`;
-      dot.dataset.ex = queryKey;
-      dot.dataset.aiResult = JSON.stringify(result);
-      dot.style.left = `calc(${pos.x} + ${jitter()})`;
-      dot.style.top  = `calc(${pos.y} + ${jitter()})`;
-      dot.title = result.label;
-      dot.addEventListener('click', e => {
-        e.stopPropagation();
-        const r = JSON.parse(dot.dataset.aiResult);
-        showAIResult(queryKey, r, dot);
-      });
-      els.dotsContainer.appendChild(dot);
-      dot.classList.add('new-dot');
-      dot.addEventListener('animationend', () => dot.classList.remove('new-dot'), { once: true });
-      showAIResult(queryKey, result, dot);
-
-    } catch(err) {
-      if (activeSearchKey !== queryKey) return;
-      els.tag.textContent = "ERROR";
-      els.title.textContent = rawQuery;
-      els.ikigai.textContent = "";
-      els.desc.textContent = "Couldn't classify \"" + rawQuery + "\". Try a well-known company name. (" + err.message + ")";
-      blocks.great.classList.add('hidden-block');
-      blocks.poor.classList.add('hidden-block');
-    } finally {
-      if (activeSearchKey === queryKey) setSearchLoading(false);
-    }
-  }
-
-  function showCompanyDetailsFromNode(queryKey, element) {
-    const profile = SEARCH_REGISTRY[queryKey];
-    if (profile) showIsolatedNodeDetails(profile, element);
-  }
-
-  els.searchBtn.addEventListener('click', executeEcosystemSearch);
-  els.searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') executeEcosystemSearch();
-  });
-
-  const regionEls = {};
-  document.querySelectorAll('.region').forEach(r=>{
-    const id = r.getAttribute('class').replace('region region-','');
-    regionEls[id] = r;
-  });
-  function activateRegion(id, on){
-    const el = regionEls[id];
-    if(el) el.classList.toggle('active', on);
-  }
-
-  document.querySelectorAll('.hotspot').forEach(hs=>{
-    const id = hs.dataset.id;
-    hs.addEventListener('click', ()=> openPanel(id));
-    hs.addEventListener('mouseenter', ()=> activateRegion(id, true));
-    hs.addEventListener('mouseleave', ()=> activateRegion(id, false));
-    hs.addEventListener('focus', ()=> activateRegion(id, true));
-    hs.addEventListener('blur', ()=> activateRegion(id, false));
-  });
-
-  document.querySelectorAll('.example-dot').forEach(dot => {
-    const exKey = dot.dataset.ex;
-    dot.addEventListener('click', (e) => {
-      e.stopPropagation(); 
-      showCompanyDetailsFromNode(exKey, dot);
-    });
-  });
+  function initHeroCanvas(){var c=document.getElementById('hero-canvas');if(!c)return;var x=c.getContext('2d');function r(){c.width=c.offsetWidth||1280;c.height=c.offsetHeight||400}r();window.addEventListener('resize',r);var n=[];for(var i=0;i<40;i++)n.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4});function d(){r();x.clearRect(0,0,c.width,c.height);for(var i=0;i<n.length;i++){var a=n[i];a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>c.width)a.vx*=-1;if(a.y<0||a.y>c.height)a.vy*=-1;a.x=Math.max(0,Math.min(c.width,a.x));a.y=Math.max(0,Math.min(c.height,a.y));x.fillStyle='rgba(93,202,165,0.5)';x.beginPath();x.arc(a.x,a.y,1.5,0,Math.PI*2);x.fill();for(var j=i+1;j<n.length;j++){var b=n[j],dx=b.x-a.x,dy=b.y-a.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<150){x.strokeStyle='rgba(93,202,165,'+(0.1*(1-dist/150))+')';x.lineWidth=0.5;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}}requestAnimationFrame(d)}d()}
+  document.addEventListener('DOMContentLoaded',initHeroCanvas);
 </script>
-
 </body>
 </html>
